@@ -1,0 +1,243 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  font-family: 'Playfair Display', serif;
+  background-color: #f7cfd3;
+  /* Retro Grid & Scanline Pattern */
+  background-image: 
+    linear-gradient(rgba(180, 100, 110, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 100, 110, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Top Status Bar */
+#top-bar {
+  height: 28px;
+  background-color: #fdfaf3;
+  border-bottom: 2px solid #2b2625;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: #2b2625;
+}
+
+/* Desktop Canvas */
+#desktop {
+  position: relative;
+  height: calc(100vh - 88px);
+  width: 100vw;
+}
+
+/* Window Component Styling */
+.window {
+  position: absolute;
+  background-color: #fdfaf3;
+  border: 2px solid #2b2625;
+  box-shadow: 4px 4px 0px rgba(43, 38, 37, 0.8);
+  display: flex;
+  flex-direction: column;
+}
+
+.window-header {
+  background-color: #fdfaf3;
+  border-bottom: 2px solid #2b2625;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  cursor: move;
+}
+
+.window-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.window-controls button {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #2b2625;
+  background-color: #fdfaf3;
+  font-size: 12px;
+  line-height: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.window-controls button:active {
+  background-color: #2b2625;
+  color: #fdfaf3;
+}
+
+.window-title {
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #2b2625;
+}
+
+.window-body {
+  padding: 16px;
+  flex-grow: 1;
+  overflow-y: auto;
+  color: #2b2625;
+}
+
+.window-footer {
+  border-top: 1px solid #2b2625;
+  padding: 2px 8px;
+  font-family: 'VT323', monospace;
+  font-size: 13px;
+  color: #666;
+  background-color: #f5efe3;
+}
+
+/* Specific Application Styling */
+.profile-card {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border: 2px solid #2b2625;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e3dad0;
+}
+
+.profile-info h2 {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.profile-info p {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.cassette-visual {
+  height: 70px;
+  background-color: #2b2625;
+  color: #fdfaf3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.audio-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.audio-controls button {
+  padding: 4px 12px;
+  border: 1px solid #2b2625;
+  background: #fdfaf3;
+  cursor: pointer;
+  font-family: 'VT323', monospace;
+}
+
+.insta-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.insta-post {
+  aspect-ratio: 1;
+  background-color: #d1c7bc;
+  border: 1px solid #2b2625;
+}
+
+.editorial-content h1 {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+.editorial-content .subtitle {
+  font-style: italic;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.editorial-content hr {
+  border: none;
+  border-top: 1px solid #2b2625;
+  margin-bottom: 12px;
+}
+
+/* Bottom Dock */
+#dock {
+  position: fixed;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 52px;
+  background-color: #fdfaf3;
+  border: 2px solid #2b2625;
+  box-shadow: 3px 3px 0px rgba(43, 38, 37, 0.8);
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  gap: 4px;
+  z-index: 9999;
+}
+
+.dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 42px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  color: #2b2625;
+}
+
+.dock-item:hover {
+  border-color: #2b2625;
+  background-color: #f0e6d2;
+}
+
+.dock-icon {
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.dock-label {
+  font-family: 'VT323', monospace;
+  font-size: 12px;
+}
