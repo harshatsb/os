@@ -1,8 +1,15 @@
+/* Custom Retro Finger Pointer Cursor */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   user-select: none;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1.5"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v11l-3-3a2 2 0 0 0-2.8 2.8l5.8 5.8C8 22 10 23 13 23h4a5 5 0 0 0 5-5v-5a2 2 0 0 0-2-2z"/></svg>'), auto !important;
+}
+
+/* Clenched Fist Cursor when Dragging Windows */
+.dragging, .dragging * {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1.5"><path d="M18 11V8a2 2 0 0 0-2-2v0a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2a2 2 0 0 0-2 2v3a5 5 0 0 0 5 5h4a5 5 0 0 0 5-5v-3a2 2 0 0 0-2-2z"/></svg>'), grabbing !important;
 }
 
 body {
@@ -11,7 +18,7 @@ body {
   overflow: hidden;
   font-family: 'Playfair Display', serif;
   background-color: #f7cfd3;
-  /* Retro Grid & Scanline Pattern */
+  /* Retro Grid Overlay Pattern */
   background-image: 
     linear-gradient(rgba(180, 100, 110, 0.15) 1px, transparent 1px),
     linear-gradient(90deg, rgba(180, 100, 110, 0.15) 1px, transparent 1px);
@@ -39,7 +46,7 @@ body {
   width: 100vw;
 }
 
-/* Window Component Styling */
+/* Window Component Styling (Resizable Enabled) */
 .window {
   position: absolute;
   background-color: #fdfaf3;
@@ -47,6 +54,10 @@ body {
   box-shadow: 4px 4px 0px rgba(43, 38, 37, 0.8);
   display: flex;
   flex-direction: column;
+  resize: both;
+  overflow: hidden;
+  min-width: 280px;
+  min-height: 200px;
 }
 
 .window-header {
@@ -57,7 +68,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 6px;
-  cursor: move;
+  flex-shrink: 0;
 }
 
 .window-controls {
@@ -72,13 +83,12 @@ body {
   background-color: #fdfaf3;
   font-size: 12px;
   line-height: 12px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.window-controls button:active {
+.window-controls button:hover {
   background-color: #2b2625;
   color: #fdfaf3;
 }
@@ -103,67 +113,208 @@ body {
   padding: 2px 8px;
   font-family: 'VT323', monospace;
   font-size: 13px;
-  color: #666;
+  color: #555;
   background-color: #f5efe3;
+  flex-shrink: 0;
 }
 
-/* Specific Application Styling */
+/* Profile / About Section */
 .profile-card {
   display: flex;
   gap: 16px;
-  align-items: center;
+  align-items: flex-start;
 }
 
-.profile-avatar {
-  width: 90px;
-  height: 90px;
+.profile-avatar-container {
+  width: 120px;
+  height: 130px;
   border: 2px solid #2b2625;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #e3dad0;
+  padding: 3px;
+  background-color: #fff;
+  flex-shrink: 0;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(15%) contrast(105%);
 }
 
 .profile-info h2 {
-  font-size: 20px;
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.role-badge {
+  font-size: 14px;
+  font-weight: bold;
+  color: #8b1d28;
   margin-bottom: 8px;
 }
 
 .profile-info p {
-  font-size: 14px;
+  font-size: 13px;
   margin-bottom: 4px;
+  font-family: 'Courier Prime', monospace;
 }
 
-.cassette-visual {
-  height: 70px;
-  background-color: #2b2625;
+.hobby-tag {
+  margin-top: 8px !important;
+  font-family: 'Playfair Display', serif !important;
+  color: #444;
+}
+
+.email-box {
+  margin-top: 10px !important;
+  padding: 4px 8px;
+  background: #eee3d3;
+  border: 1px solid #2b2625;
+  display: inline-block;
+}
+
+.email-box a {
+  color: #2b2625;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Music Player & Equalizer Visualizer */
+.visualizer-screen {
+  background-color: #1a1716;
+  border: 2px solid #2b2625;
+  padding: 10px;
   color: #fdfaf3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'VT323', monospace;
-  font-size: 18px;
   margin-bottom: 12px;
 }
 
-.audio-controls {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.audio-controls button {
-  padding: 4px 12px;
-  border: 1px solid #2b2625;
-  background: #fdfaf3;
-  cursor: pointer;
-  font-family: 'VT323', monospace;
-}
-
-.insta-header {
+.visualizer-header {
   display: flex;
   justify-content: space-between;
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  color: #6cf08a;
+  margin-bottom: 8px;
+}
+
+.equalizer-bars {
+  display: flex;
+  gap: 4px;
+  height: 40px;
+  align-items: flex-end;
+}
+
+.equalizer-bars .bar {
+  flex-grow: 1;
+  background-color: #6cf08a;
+  height: 20%;
+  transition: height 0.15s ease;
+}
+
+/* Playing Animation */
+.playing .bar:nth-child(1) { animation: eq 0.6s infinite alternate; }
+.playing .bar:nth-child(2) { animation: eq 0.4s infinite alternate; }
+.playing .bar:nth-child(3) { animation: eq 0.8s infinite alternate; }
+.playing .bar:nth-child(4) { animation: eq 0.5s infinite alternate; }
+.playing .bar:nth-child(5) { animation: eq 0.7s infinite alternate; }
+.playing .bar:nth-child(6) { animation: eq 0.9s infinite alternate; }
+
+@keyframes eq {
+  0% { height: 15%; }
+  100% { height: 95%; }
+}
+
+.music-controls-panel {
+  border: 1px solid #2b2625;
+  padding: 8px;
+  background: #f0e6d2;
   margin-bottom: 12px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.btn-row button {
+  flex-grow: 1;
+  padding: 6px;
+  border: 1px solid #2b2625;
+  background: #fdfaf3;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+}
+
+.btn-row button.primary-btn {
+  background: #2b2625;
+  color: #fdfaf3;
+}
+
+.volume-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+}
+
+.volume-row input {
+  flex-grow: 1;
+}
+
+.tracklist-container {
+  border: 1px solid #2b2625;
+  background: #fff;
+  height: 140px;
+  overflow-y: auto;
+}
+
+.tracklist-header {
+  background: #2b2625;
+  color: #fff;
+  font-family: 'VT323', monospace;
+  font-size: 13px;
+  padding: 2px 6px;
+}
+
+#playlist-ul {
+  list-style: none;
+}
+
+#playlist-ul li {
+  padding: 6px 8px;
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+#playlist-ul li:hover {
+  background-color: #f5efe3;
+}
+
+#playlist-ul li.active {
+  background-color: #2b2625;
+  color: #6cf08a;
+}
+
+/* Instagram Feed Embed simulation */
+.insta-profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2b2625;
+}
+
+.insta-follow-btn {
+  padding: 4px 8px;
+  background: #2b2625;
+  color: #fff;
+  text-decoration: none;
+  font-family: 'VT323', monospace;
   font-size: 14px;
 }
 
@@ -177,32 +328,104 @@ body {
   aspect-ratio: 1;
   background-color: #d1c7bc;
   border: 1px solid #2b2625;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #2b2625;
+  font-size: 11px;
+  font-family: 'VT323', monospace;
+  padding: 4px;
+  text-align: center;
+  background-size: cover;
 }
 
+.insta-post:hover {
+  filter: brightness(1.1);
+  border-width: 2px;
+}
+
+/* Writings Reader Module */
 .editorial-content h1 {
-  font-size: 24px;
-  margin-bottom: 6px;
+  font-size: 22px;
+  margin-bottom: 4px;
 }
 
 .editorial-content .subtitle {
   font-style: italic;
-  font-size: 14px;
+  font-size: 13px;
+  color: #666;
   margin-bottom: 8px;
 }
 
-.editorial-content hr {
-  border: none;
-  border-top: 1px solid #2b2625;
-  margin-bottom: 12px;
+.articles-index {
+  list-style: none;
+  margin-top: 10px;
 }
 
-/* Bottom Dock */
+.articles-index li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 8px;
+  border-bottom: 1px solid #2b2625;
+  font-family: 'Playfair Display', serif;
+}
+
+.articles-index li:hover {
+  background-color: #2b2625;
+  color: #fdfaf3;
+}
+
+.art-date {
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  width: 80px;
+}
+
+.art-title {
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+.btn-back {
+  padding: 4px 8px;
+  background: #2b2625;
+  color: #fff;
+  border: none;
+  font-family: 'VT323', monospace;
+  margin-bottom: 10px;
+}
+
+/* Yellow Sticky Note Widget */
+.sticky-note {
+  background-color: #fff49c !important;
+  border-color: #8c8230 !important;
+}
+
+.note-header {
+  background-color: #ebd25b !important;
+  border-bottom-color: #8c8230 !important;
+}
+
+.sticky-note textarea {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  resize: none;
+  outline: none;
+}
+
+/* Bottom Dock & Custom SOKA Logo */
 #dock {
   position: fixed;
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  height: 52px;
+  height: 54px;
   background-color: #fdfaf3;
   border: 2px solid #2b2625;
   box-shadow: 3px 3px 0px rgba(43, 38, 37, 0.8);
@@ -219,10 +442,9 @@ body {
   align-items: center;
   justify-content: center;
   width: 58px;
-  height: 42px;
+  height: 44px;
   border: 1px solid transparent;
   background: transparent;
-  cursor: pointer;
   text-decoration: none;
   color: #2b2625;
 }
@@ -235,6 +457,19 @@ body {
 .dock-icon {
   font-size: 18px;
   line-height: 20px;
+}
+
+/* SOKA Custom Royal Blue Logo Box */
+.soka-icon-box {
+  background-color: #0b3c5d;
+  color: #ffffff;
+  font-family: 'VT323', monospace;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 2px 4px;
+  border: 1px solid #2b2625;
+  border-radius: 2px;
+  line-height: 12px;
 }
 
 .dock-label {
