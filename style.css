@@ -1,14 +1,14 @@
-/* Custom Retro Finger Pointer Cursor */
+/* Custom Cursor Management (Custom Dithered Hands) */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   user-select: none;
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1.5"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v11l-3-3a2 2 0 0 0-2.8 2.8l5.8 5.8C8 22 10 23 13 23h4a5 5 0 0 0 5-5v-5a2 2 0 0 0-2-2z"/></svg>'), auto !important;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1.5"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v11l-3-3a2 2 0 0 0-2.8 2.8l5.8 5.8C8 22 10 23 13 23h4a5 5 0 0 0 5-5v-5a2 2 0 0 0-2 2z"/></svg>'), auto !important;
 }
 
-/* Clenched Fist Cursor when Dragging Windows */
-.dragging, .dragging * {
+/* Grabbing Cursor when Dragging Windows */
+.dragging {
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1.5"><path d="M18 11V8a2 2 0 0 0-2-2v0a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2a2 2 0 0 0-2 2v3a5 5 0 0 0 5 5h4a5 5 0 0 0 5-5v-3a2 2 0 0 0-2-2z"/></svg>'), grabbing !important;
 }
 
@@ -18,11 +18,22 @@ body {
   overflow: hidden;
   font-family: 'Playfair Display', serif;
   background-color: #f7cfd3;
-  /* Retro Grid Overlay Pattern */
   background-image: 
     linear-gradient(rgba(180, 100, 110, 0.15) 1px, transparent 1px),
     linear-gradient(90deg, rgba(180, 100, 110, 0.15) 1px, transparent 1px);
   background-size: 20px 20px;
+}
+
+/* Halftone Dither Screen Overlay */
+body::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  background-image: radial-gradient(#2b2625 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+  opacity: 0.1;
+  z-index: 999;
 }
 
 /* Top Status Bar */
@@ -39,6 +50,16 @@ body {
   color: #2b2625;
 }
 
+#clock {
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+#clock:hover {
+  background-color: #2b2625;
+  color: #fdfaf3;
+}
+
 /* Desktop Canvas */
 #desktop {
   position: relative;
@@ -46,7 +67,7 @@ body {
   width: 100vw;
 }
 
-/* Window Component Styling (Resizable Enabled) */
+/* Window Component Styling */
 .window {
   position: absolute;
   background-color: #fdfaf3;
@@ -54,10 +75,13 @@ body {
   box-shadow: 4px 4px 0px rgba(43, 38, 37, 0.8);
   display: flex;
   flex-direction: column;
+}
+
+.window.resizable {
   resize: both;
   overflow: hidden;
-  min-width: 280px;
-  min-height: 200px;
+  min-width: 320px;
+  min-height: 240px;
 }
 
 .window-header {
@@ -68,7 +92,6 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 6px;
-  flex-shrink: 0;
 }
 
 .window-controls {
@@ -88,7 +111,7 @@ body {
   justify-content: center;
 }
 
-.window-controls button:hover {
+.window-controls button:active {
   background-color: #2b2625;
   color: #fdfaf3;
 }
@@ -113,161 +136,118 @@ body {
   padding: 2px 8px;
   font-family: 'VT323', monospace;
   font-size: 13px;
-  color: #555;
+  color: #666;
   background-color: #f5efe3;
-  flex-shrink: 0;
 }
 
-/* Profile / About Section */
-.profile-card {
+/* Settings Style ( win-about ) */
+.settings-layout {
   display: flex;
-  gap: 16px;
-  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+}
+
+.settings-avatar-area {
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #2b2625;
+  padding: 10px;
+  background-color: #fff;
+  flex-shrink: 0;
 }
 
 .profile-avatar-container {
-  width: 120px;
-  height: 130px;
+  width: 110px; height: 110px;
   border: 2px solid #2b2625;
-  padding: 3px;
-  background-color: #fff;
-  flex-shrink: 0;
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+  margin-bottom: 10px;
+  overflow: hidden;
+  background: #000;
 }
 
 .profile-avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(15%) contrast(105%);
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(100%) contrast(150%) brightness(120%) drop-shadow(1px 1px 0px #fff) drop-shadow(-1px -1px 0px #fff);
 }
 
-.profile-info h2 {
-  font-size: 22px;
-  margin-bottom: 2px;
-}
-
-.role-badge {
+.settings-meta {
+  font-family: 'VT323', monospace;
   font-size: 14px;
-  font-weight: bold;
-  color: #8b1d28;
-  margin-bottom: 8px;
 }
 
-.profile-info p {
-  font-size: 13px;
-  margin-bottom: 4px;
-  font-family: 'Courier Prime', monospace;
+.settings-content-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.hobby-tag {
-  margin-top: 8px !important;
-  font-family: 'Playfair Display', serif !important;
-  color: #444;
+.settings-block h3 {
+  font-family: 'VT323', monospace;
+  background-color: #2b2625;
+  color: #fdfaf3;
+  padding: 2px 6px;
+  margin-bottom: 6px;
+  font-size: 15px;
 }
 
-.email-box {
-  margin-top: 10px !important;
-  padding: 4px 8px;
-  background: #eee3d3;
-  border: 1px solid #2b2625;
-  display: inline-block;
+.settings-block p {
+  font-size: 14px;
+  margin-bottom: 3px;
+  line-height: 1.3;
 }
 
-.email-box a {
-  color: #2b2625;
+.settings-action {
+  margin-top: 10px;
+  padding: 4px;
+  border: 1px dashed #2b2625;
+}
+
+.settings-action a {
   text-decoration: none;
   font-weight: bold;
+  color: #2b2625;
 }
 
 /* Music Player & Equalizer Visualizer */
-.visualizer-screen {
-  background-color: #1a1716;
-  border: 2px solid #2b2625;
-  padding: 10px;
-  color: #fdfaf3;
-  margin-bottom: 12px;
-}
-
-.visualizer-header {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'VT323', monospace;
-  font-size: 15px;
-  color: #6cf08a;
-  margin-bottom: 8px;
-}
-
-.equalizer-bars {
-  display: flex;
-  gap: 4px;
-  height: 40px;
-  align-items: flex-end;
-}
-
-.equalizer-bars .bar {
-  flex-grow: 1;
-  background-color: #6cf08a;
-  height: 20%;
-  transition: height 0.15s ease;
-}
-
-/* Playing Animation */
-.playing .bar:nth-child(1) { animation: eq 0.6s infinite alternate; }
-.playing .bar:nth-child(2) { animation: eq 0.4s infinite alternate; }
-.playing .bar:nth-child(3) { animation: eq 0.8s infinite alternate; }
-.playing .bar:nth-child(4) { animation: eq 0.5s infinite alternate; }
-.playing .bar:nth-child(5) { animation: eq 0.7s infinite alternate; }
-.playing .bar:nth-child(6) { animation: eq 0.9s infinite alternate; }
-
-@keyframes eq {
-  0% { height: 15%; }
-  100% { height: 95%; }
-}
-
-.music-controls-panel {
+.music-controls-top {
   border: 1px solid #2b2625;
   padding: 8px;
   background: #f0e6d2;
   margin-bottom: 12px;
 }
 
-.btn-row {
+.music-meta-display {
   display: flex;
-  gap: 6px;
+  justify-content: space-between;
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  color: #6cf08a;
+  background: #1a1716;
+  padding: 2px 6px;
   margin-bottom: 8px;
 }
 
-.btn-row button {
-  flex-grow: 1;
-  padding: 6px;
+.music-action-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.music-action-row button {
+  padding: 4px 10px;
   border: 1px solid #2b2625;
   background: #fdfaf3;
   font-family: 'VT323', monospace;
   font-size: 14px;
 }
 
-.btn-row button.primary-btn {
-  background: #2b2625;
-  color: #fdfaf3;
-}
-
-.volume-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'VT323', monospace;
-  font-size: 15px;
-}
-
-.volume-row input {
-  flex-grow: 1;
-}
-
 .tracklist-container {
   border: 1px solid #2b2625;
   background: #fff;
-  height: 140px;
+  height: 180px;
   overflow-y: auto;
 }
 
@@ -277,10 +257,6 @@ body {
   font-family: 'VT323', monospace;
   font-size: 13px;
   padding: 2px 6px;
-}
-
-#playlist-ul {
-  list-style: none;
 }
 
 #playlist-ul li {
@@ -299,93 +275,63 @@ body {
   color: #6cf08a;
 }
 
-/* Instagram Feed Embed simulation */
-.insta-profile-header {
+/* Writings (Newsroom Style) */
+.writings-nav {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #2b2625;
+  gap: 2px;
+  border-bottom: 2px solid #2b2625;
+  padding: 0 10px;
 }
 
-.insta-follow-btn {
-  padding: 4px 8px;
+.writings-nav button {
+  padding: 4px 12px;
+  border: 2px solid #2b2625;
+  border-bottom: none;
+  background: #f5efe3;
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  border-radius: 4px 4px 0 0;
+}
+
+.writings-nav button.active {
   background: #2b2625;
-  color: #fff;
-  text-decoration: none;
-  font-family: 'VT323', monospace;
-  font-size: 14px;
+  color: #fdfaf3;
 }
 
-.insta-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-}
-
-.insta-post {
-  aspect-ratio: 1;
-  background-color: #d1c7bc;
-  border: 1px solid #2b2625;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  color: #2b2625;
-  font-size: 11px;
-  font-family: 'VT323', monospace;
-  padding: 4px;
-  text-align: center;
-  background-size: cover;
-}
-
-.insta-post:hover {
-  filter: brightness(1.1);
-  border-width: 2px;
-}
-
-/* Writings Reader Module */
-.editorial-content h1 {
-  font-size: 22px;
-  margin-bottom: 4px;
-}
-
-.editorial-content .subtitle {
-  font-style: italic;
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 8px;
-}
-
-.articles-index {
+.writings-index {
   list-style: none;
   margin-top: 10px;
 }
 
-.articles-index li {
+.index-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 12px;
   padding: 10px 8px;
   border-bottom: 1px solid #2b2625;
   font-family: 'Playfair Display', serif;
+  cursor: pointer;
 }
 
-.articles-index li:hover {
+.index-item:hover {
   background-color: #2b2625;
   color: #fdfaf3;
+}
+
+.thumb-dither {
+  width: 40px; height: 40px;
+  background: radial-gradient(#2b2625 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+  border: 1px solid #2b2625;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.index-info h3 {
+  font-size: 16px;
 }
 
 .art-date {
   font-family: 'VT323', monospace;
   font-size: 14px;
-  width: 80px;
-}
-
-.art-title {
-  flex-grow: 1;
-  font-weight: bold;
 }
 
 .btn-back {
@@ -397,35 +343,105 @@ body {
   margin-bottom: 10px;
 }
 
-/* Yellow Sticky Note Widget */
-.sticky-note {
-  background-color: #fff49c !important;
-  border-color: #8c8230 !important;
+/* SOKA Style (win-soka) */
+.soka-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 20px;
 }
 
-.note-header {
-  background-color: #ebd25b !important;
-  border-bottom-color: #8c8230 !important;
+.soka-content-text p {
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
-.sticky-note textarea {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: transparent;
+.soka-link-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #0b3c5d;
+  color: #fff;
+  text-decoration: none;
   font-family: 'VT323', monospace;
-  font-size: 16px;
-  resize: none;
-  outline: none;
 }
 
-/* Bottom Dock & Custom SOKA Logo */
+.soka-visual-dither {
+  width: 100px; height: 100px;
+  background-color: #0b3c5d;
+  color: #fff;
+  font-family: 'VT323', monospace;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid #2b2625;
+}
+
+/* Guestbook Style (win-guestbook) */
+.guestbook-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.guestbook-input-area {
+  border: 1px solid #2b2625;
+  padding: 10px;
+  background: #eee3d3;
+  margin-bottom: 12px;
+}
+
+.guestbook-input-area p {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.guestbook-input-area input {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid #2b2625;
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+}
+
+.guestbook-list {
+  border: 1px solid #2b2625;
+  background: #fff;
+  height: 200px;
+  overflow-y: auto;
+}
+
+.guest-message {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+}
+
+.gb-time {
+  font-family: 'VT323', monospace;
+  color: #666;
+}
+
+.guest-message p {
+  margin-top: 3px;
+}
+
+/* SOKA Custom Royal Blue Logo Box */
+.soka-icon-box {
+  background-color: #0b3c5d;
+  color: #ffffff;
+  font-family: 'VT323', monospace;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 2px 4px;
+  border: 1px solid #2b2625;
+  border-radius: 2px;
+}
+
+/* Bottom Dock */
 #dock {
   position: fixed;
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  height: 54px;
+  height: 52px;
   background-color: #fdfaf3;
   border: 2px solid #2b2625;
   box-shadow: 3px 3px 0px rgba(43, 38, 37, 0.8);
@@ -442,9 +458,10 @@ body {
   align-items: center;
   justify-content: center;
   width: 58px;
-  height: 44px;
+  height: 42px;
   border: 1px solid transparent;
   background: transparent;
+  cursor: pointer;
   text-decoration: none;
   color: #2b2625;
 }
@@ -457,19 +474,6 @@ body {
 .dock-icon {
   font-size: 18px;
   line-height: 20px;
-}
-
-/* SOKA Custom Royal Blue Logo Box */
-.soka-icon-box {
-  background-color: #0b3c5d;
-  color: #ffffff;
-  font-family: 'VT323', monospace;
-  font-weight: bold;
-  font-size: 11px;
-  padding: 2px 4px;
-  border: 1px solid #2b2625;
-  border-radius: 2px;
-  line-height: 12px;
 }
 
 .dock-label {
