@@ -1,5 +1,33 @@
 let highestZIndex = 10;
 
+// Retro Setup / Boot Loader Logic
+function simulateOsSetup() {
+  const bootLoader = document.getElementById('os-boot-loader');
+  const progressBar = document.getElementById('boot-progress');
+  const percentText = document.getElementById('boot-percent');
+  
+  let progress = 0;
+  const setupInterval = setInterval(() => {
+    progress += Math.random() * 8; // Random incremental jumps
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(setupInterval);
+      
+      // Hide Loader and show desktop with a slight delay
+      setTimeout(() => {
+        bootLoader.style.display = 'none';
+        openWindow('win-about'); // Open System Info on boot
+      }, 500);
+    }
+    
+    progressBar.style.width = progress + '%';
+    percentText.innerText = Math.round(progress);
+  }, 100); // Fast but simulated loading
+}
+
+// Start Setup on Page Load
+simulateOsSetup();
+
 // Update Live Clock
 function updateClock() {
   const now = new Date();
@@ -27,7 +55,7 @@ function closeWindow(id) {
   }
 }
 
-// Window Dragging and Clenched Hand Cursor
+// Drag & Drop Mechanics
 document.querySelectorAll('.window').forEach(win => {
   const header = win.querySelector('.window-header');
 
@@ -38,9 +66,6 @@ document.querySelectorAll('.window').forEach(win => {
 
   header.addEventListener('mousedown', e => {
     if (e.target.tagName === 'BUTTON') return;
-    
-    // Change Cursor to Clenched Fist when dragging
-    win.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'black\' stroke=\'white\' stroke-width=\'1.5\'><path d=\'M18 11V8a2 2 0 0 0-2-2v0a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2a2 2 0 0 0-2 2v3a5 5 0 0 0 5 5h4a5 5 0 0 0 5-5v-3a2 2 0 0 0-2-2z\'/></svg>"), grabbing';
 
     let shiftX = e.clientX - win.getBoundingClientRect().left;
     let shiftY = e.clientY - win.getBoundingClientRect().top;
@@ -58,13 +83,11 @@ document.querySelectorAll('.window').forEach(win => {
 
     document.addEventListener('mouseup', () => {
       document.removeEventListener('mousemove', onMouseMove);
-      // Revert Cursor
-      win.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'black\' stroke=\'white\' stroke-width=\'1.5\'><path d=\'M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v-4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v11l-3-3a2 2 0 0 0-2.8 2.8l5.8 5.8C8 22 10 23 13 23h4a5 5 0 0 0 5-5v-5a2 2 0 0 0-2-2z\'/></svg>"), pointer';
     }, { once: true });
   });
 });
 
-// Audio Playlist Manager (Volume Control added)
+// Audio Playlist Manager (Mute, Vol added)
 const playlist = [
   { title: "01. Lofi Chill Beats (Acoustic)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
   { title: "02. Synthwave Sunset (1988)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -79,6 +102,7 @@ const audio = document.getElementById('audio-element');
 const playBtn = document.getElementById('play-btn');
 const muteBtn = document.getElementById('mute-btn');
 const nowPlayingTitle = document.getElementById('now-playing-title');
+const eqBars = document.getElementById('eq-bars');
 const playlistItems = document.querySelectorAll('#playlist-ul li');
 
 function playTrack(index) {
@@ -92,16 +116,29 @@ function playTrack(index) {
 
   audio.play();
   playBtn.innerText = '⏸ Pause';
+  eqBars.classList.add('playing');
 }
 
 function toggleAudio() {
   if (audio.paused) {
     audio.play();
     playBtn.innerText = '⏸ Pause';
+    eqBars.classList.add('playing');
   } else {
     audio.pause();
     playBtn.innerText = '▶ Play';
+    eqBars.classList.remove('playing');
   }
+}
+
+function nextTrack() {
+  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+  playTrack(currentTrackIndex);
+}
+
+function prevTrack() {
+  currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+  playTrack(currentTrackIndex);
 }
 
 function toggleMute() {
@@ -117,18 +154,18 @@ function changeVolume(val) {
 const articles = {
   a1: {
     title: "The Future of Legal Tech & AI in Indian Courts",
-    meta: "August 2026 // Constitutional Law // AI",
-    content: "<p>As AI tools and digitized dockets expand across Indian jurisprudence, the integration of technology in courtrooms offers unprecedented legal access while raising essential questions regarding procedural fairness...</p><p>Advocates who understand the intersection of statute and data will be essential in navigating the next decade of advocacy.</p>"
+    meta: "August 2026 // Constitutional & Tech Law",
+    content: "<p>As AI tools and digitized dockets expand across Indian jurisprudence, the integration of technology in courtrooms offers unprecedented legal access while raising essential questions regarding procedural fairness and data privacy...</p><p>Advocates who understand computational logic alongside statutory principles will be best equipped to shape the next decade of advocacy.</p>"
   },
   a2: {
     title: "Founding SOKA: Redefining Modern Legal Practice",
     meta: "May 2026 // Legal Innovation // Founder Notes",
-    content: "<p>SOKA was established with a singular vision: combining deep legal rigour with streamlined execution. Our mission is to eliminate archaic complexities in legal service delivery.</p>"
+    content: "<p>SOKA was established with a singular vision: combining deep legal rigour with modern, streamlined execution. Our mission is to eliminate archaic complexities in legal service delivery.</p>"
   },
   a3: {
-    title: "Notes from the Supreme Court: Precision in Advocacy",
-    meta: "January 2026 // Supreme Court of India // Notes",
-    content: "<p>The Supreme Court environment demands extreme preparation. Precision of argument, logical clarity, and swift adaptability under judicial scrutiny are the bedrock of successful representation.</p>"
+    title: "Reflections on Tinkering: Why Lawyers Should Code",
+    meta: "January 2026 // Personal Essays",
+    content: "<p>The constructs of legal drafting and software development share the exact same foundation: logic, conditionals, and structure. Tinkering with code refines the precision with which we construct contracts and arguments.</p>"
   }
 };
 
@@ -149,7 +186,7 @@ function showWritingsIndex() {
   document.getElementById('writings-reader-view').style.display = 'none';
 }
 
-// Guestbook Management
+// Guestbook Management (Sign anonymoulsy)
 const guestbookMessages = document.getElementById('guestbook-messages');
 const guestbookInput = document.getElementById('guestbook-input');
 
