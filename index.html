@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Harshat_OS // Personal GUI</title>
+  <title>Harshat_OS // Digital Workstation v3.0</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,79 +11,97 @@
 </head>
 <body>
 
+  <!-- Retro Setup / Boot Loader Sequence -->
+  <div id="os-boot-loader">
+    <div class="boot-modal">
+      <div class="modal-header">System Setup // Boot v3.0</div>
+      <div class="modal-body">
+        <p>Loading Harshat_OS configuration...</p>
+        <div class="progress-bar-container">
+          <div class="progress-bar-dither" id="boot-progress"></div>
+        </div>
+        <p class="status-text">Mounting Digital Workstation... <span id="boot-percent">0</span>%</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Top Status Bar -->
   <header id="top-bar">
     <div class="top-bar-left">
-      <span class="system-status">● HARSHAT ONLINE</span>
-      <span class="system-os">v2.1 // Legal & Tech tinkerer</span>
+      <span class="system-status">● HARSHAT_OS v3.0</span>
+      <span class="system-status">| DIGITAL WORKSTATION</span>
     </div>
     <div class="top-bar-right">
       <!-- Clicking this opens win-about -->
-      <span id="clock" onclick="openWindow('win-about')" title="Open System Settings">THU 6 AUG 2026 21:04</span>
+      <span id="clock" onclick="openWindow('win-about')" title="System Info">THU 6 AUG 2026 19:26</span>
     </div>
   </header>
 
-  <!-- Main Desktop Space -->
+  <!-- Main Desktop Canvas -->
   <main id="desktop">
 
-    <!-- About Window (Settings Style, no themes) -->
-    <div class="window settings-style" id="win-about" style="top: 80px; left: 100px; width: 440px; height: 350px;">
+    <!-- About Window (Simplified System Info style) -->
+    <div class="window" id="win-about" style="top: 80px; left: 100px; width: 420px; height: 320px;">
       <div class="window-header">
         <div class="window-controls">
           <button class="btn-close" onclick="closeWindow('win-about')">×</button>
           <button class="btn-minimize" onclick="closeWindow('win-about')">_</button>
         </div>
-        <div class="window-title">SYSTEM INFO // HARSHAT</div>
+        <div class="window-title">SYSTEM ABOUT // CONFIGURATION</div>
       </div>
-      <div class="window-body settings-layout">
-        
-        <div class="settings-avatar-area">
-          <div class="profile-avatar-container">
-            <img class="profile-avatar-img" src="data:image/jpeg;base64,...(Your Dithered Photo)..." alt="Harshat Profile">
+      <div class="window-body">
+        <div class="system-about-layout">
+          <div class="system-info-block">
+            <h3>USER DEFINITION</h3>
+            <p>NAME: Harshat</p>
+            <p>ROLE: Lawyer, Supreme Court of India</p>
+            <p>ORIGIN: Punjab | CURRENT: Delhi, IN</p>
+            <p>CONTACT: <a href="mailto:13.harshat@gmail.com">13.harshat@gmail.com</a></p>
           </div>
-          <h2>Harshat</h2>
-          <p class="settings-meta">Ver: 2.1 | JAL, PB</p>
-        </div>
-
-        <div class="settings-content-area">
-          <div class="settings-block">
-            <h3>USER PROFILE</h3>
-            <p><strong>NAME:</strong> Harshat</p>
-            <p><strong>ROLE:</strong> Lawyer, Supreme Court of India</p>
-            <p><strong>FOUNDER:</strong> SOKA</p>
-            <p><strong>ORIGIN:</strong> Jalandhar, Punjab</p>
-            <p><strong>CURRENT:</strong> New Delhi</p>
-          </div>
-          <div class="settings-block">
-            <h3>INTERESTS // CONTACT</h3>
-            <p><em>"I like tinkering around."</em></p>
-            <p class="settings-action">✉ <a href="mailto:13.harshat@gmail.com">13.harshat@gmail.com</a></p>
+          <div class="system-info-block">
+            <h3>SYSTEM METRICS</h3>
+            <p>OS: Harshat_OS v3.0</p>
+            <p>ENVIRONMENT: Minimal Retro GUI</p>
+            <p>BUILD: Aug 2026 // Production</p>
           </div>
         </div>
       </div>
-      <div class="window-footer">Copyright 1986-2026 Harshat Ltd</div>
+      <div class="window-footer">Copyright 1986-2026 Harshat Ltd. All rights reserved.</div>
     </div>
 
-    <!-- Music Player Window (Expanded) -->
-    <div class="window" id="win-music" style="top: 100px; left: 560px; width: 400px; height: 420px;">
-      <div class="window-header">
+    <!-- Music Player Window (Walkman/Hardware styled) -->
+    <div class="window music-walkman" id="win-music" style="top: 100px; left: 560px; width: 340px; height: 440px;">
+      <div class="window-header music-header">
         <div class="window-controls">
           <button class="btn-close" onclick="closeWindow('win-music')">×</button>
           <button class="btn-minimize" onclick="closeWindow('win-music')">_</button>
         </div>
-        <div class="window-title">HARSHAT HI-FI MUSIC PLAYER</div>
+        <div class="window-title">HI-FI AUDIO DECK v1.2</div>
       </div>
       <div class="window-body">
         
-        <!-- Controls (Mute/Volume added) -->
-        <div class="music-controls-top">
-          <div class="music-meta-display">
-            <span id="now-playing-title">► Track 01</span>
+        <!-- Retro Visualizer Display -->
+        <div class="visualizer-screen">
+          <div class="visualizer-header">
+            <span id="now-playing-title">► Track 01: Lofi Waves</span>
             <span id="track-time">0:00</span>
           </div>
-          <div class="music-action-row">
-            <button onclick="toggleAudio()" id="play-btn">▶ Play</button>
-            <button onclick="toggleMute()" id="mute-btn">🔊 Vol</button>
+          <div class="equalizer-bars" id="eq-bars">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          </div>
+        </div>
+
+        <!-- Controls (Vol added) -->
+        <div class="music-controls-panel">
+          <div class="btn-row">
+            <button onclick="prevTrack()" title="Previous Track">⏮</button>
+            <button onclick="toggleAudio()" id="play-btn" class="primary-btn">▶ Play</button>
+            <button onclick="nextTrack()" title="Next Track">⏭</button>
+            <button onclick="toggleMute()" id="mute-btn">🔊</button>
+          </div>
+          <div class="volume-row">
             <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8" oninput="changeVolume(this.value)">
           </div>
         </div>
@@ -92,7 +110,7 @@
 
         <!-- Scrollable Tracklist -->
         <div class="tracklist-container">
-          <div class="tracklist-header">PLAYLIST QUEUE (SELECT TO PLAY)</div>
+          <div class="tracklist-header">PLAYLIST QUEUE</div>
           <ul id="playlist-ul">
             <li class="active" onclick="playTrack(0)">01. Lofi Chill Beats (Acoustic)</li>
             <li onclick="playTrack(1)">02. Synthwave Sunset (1988)</li>
@@ -103,59 +121,24 @@
           </ul>
         </div>
       </div>
-      <div class="window-footer">Stereo Output // Lofi Verified</div>
+      <div class="window-footer">Analog Simulation // Stereo Output</div>
     </div>
 
-    <!-- Instagram Window -->
-    <div class="window" id="win-instagram" style="top: 240px; left: 200px; width: 380px;">
-      <div class="window-header">
-        <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-instagram')">×</button>
-          <button class="btn-minimize" onclick="closeWindow('win-instagram')">_</button>
-        </div>
-        <div class="window-title">INSTAGRAM // @HARSHATSB</div>
-      </div>
-      <div class="window-body">
-        <div class="insta-embed">
-          <div class="insta-header">
-            <strong>@harshatsb</strong>
-            <span><a href="https://www.instagram.com/harshatsb?igsh=eGtvMWh6ZDFrMXdh" target="_blank">Open App</a></span>
-          </div>
-          <div class="insta-grid">
-            <div class="insta-post">📷</div>
-            <div class="insta-post">⚖️</div>
-            <div class="insta-post">📍</div>
-            <div class="insta-post">📜</div>
-            <div class="insta-post">Building SOKA</div>
-            <div class="insta-post">...</div>
-          </div>
-        </div>
-      </div>
-      <div class="window-footer">Embedded Simulation // Visit @harshatsb for full feed</div>
-    </div>
-
-    <!-- Writings Window (Newsroom Style) -->
-    <div class="window writings-style resizable" id="win-writings" style="top: 60px; left: 160px; width: 560px; height: 450px;">
+    <!-- Opinions Window (Simplified Newsroom Style) -->
+    <div class="window resizable" id="win-writings" style="top: 60px; left: 160px; width: 560px; height: 450px;">
       <div class="window-header writings-header">
         <div class="window-controls">
           <button class="btn-close" onclick="closeWindow('win-writings')">×</button>
           <button class="btn-minimize" onclick="closeWindow('win-writings')">_</button>
         </div>
-        <div class="window-title">NEWSROOM // THE HARSHAT REPORT</div>
+        <div class="window-title">OPINIONS // PUBLIC NOTES</div>
       </div>
-      <div class="window-body writings-layout">
+      <div class="window-body editorial-content">
         
-        <div class="writings-nav">
-          <button class="active">All Legal Insights</button>
-          <button>Founder Notes</button>
-          <button>Tech/Tinkering</button>
-        </div>
-
         <div id="writings-list-view">
-          <div class="newsroom-masthead"><h1>NEWSROOM</h1></div>
-          <p class="writings-subtitle">Perspectives on law, legal tech, tinkering, and the Supreme Court of India.</p>
+          <div class="newsroom-masthead"><h1>OPINIONS</h1></div>
+          <p class="writings-subtitle">Notes on Constitutional Law, Legal Innovation, SOKA, and Retro-Tech.</p>
           <hr>
-          
           <div class="writings-index">
             <div class="index-item" onclick="readArticle('a1')">
               <div class="thumb-dither">📷</div>
@@ -172,9 +155,9 @@
               </div>
             </div>
             <div class="index-item" onclick="readArticle('a3')">
-              <div class="thumb-dither">🏢</div>
+              <div class="thumb-dither">Office</div>
               <div class="index-info">
-                <h3>Notes from the Supreme Court: Precision in Advocacy</h3>
+                <h3>Reflections on Tinkering: Why Lawyers Should Code</h3>
                 <span class="art-date">14 JAN 2026</span>
               </div>
             </div>
@@ -183,7 +166,7 @@
 
         <!-- Single Article Reader View (Hidden initially) -->
         <div id="writings-reader-view" style="display: none;">
-          <button onclick="showWritingsIndex()" class="btn-back">← Back to Newsroom</button>
+          <button onclick="showWritingsIndex()" class="btn-back">← Back to Index</button>
           <h1 id="article-heading">Article Title</h1>
           <p id="article-meta">Date // Category</p>
           <hr>
@@ -193,38 +176,38 @@
         </div>
 
       </div>
-      <div class="window-footer">Readership: Verified Advocacy // Public Notes</div>
+      <div class="window-footer">Writings are verified // For educational purpose only</div>
     </div>
 
-    <!-- SOKA Window (Vacation Style) -->
-    <div class="window soka-style" id="win-soka" style="top: 280px; left: 740px; width: 340px; height: 320px; display: none;">
+    <!-- SOKA Window (Optimized Copy) -->
+    <div class="window" id="win-soka" style="top: 280px; left: 700px; width: 320px; height: 300px; display: none;">
       <div class="window-header soka-header">
         <div class="window-controls">
           <button class="btn-close" onclick="closeWindow('win-soka')">×</button>
         </div>
-        <div class="window-title">SOKA // LEGAL ADVOCACY</div>
+        <div class="window-title">SOKA // A LEGAL STUDIO</div>
       </div>
       <div class="window-body soka-layout">
+        <div class="soka-visual">SOKA</div>
         <div class="soka-content-text">
-          <p>Founded by Harshat. SOKA merges deep legal rigour with modern innovation. Our mission is to eliminate archaic complexities in legal practice.</p>
-          <p>Corporate Advisories | Litigation | Delhi & Punjab.</p>
+          <p>SOKA: A Legal Studio is a modern, Delhi-based legal practice built for India's creative industry.</p>
+          <p>We partner with artists, musicians, filmmakers, writers, and digital creators to navigate the complex legal landscape of their creative work.</p>
           <a href="https://www.legalbysoka.com" target="_blank" class="soka-link-btn">Visit www.legalbysoka.com</a>
         </div>
-        <div class="soka-visual-dither">SOKA</div>
       </div>
     </div>
 
     <!-- Guestbook Window -->
-    <div class="window guestbook-style resizable" id="win-guestbook" style="top: 180px; left: 820px; width: 360px; height: 380px; display: none;">
+    <div class="window resizable" id="win-guestbook" style="top: 180px; left: 820px; width: 360px; height: 380px; display: none;">
       <div class="window-header guestbook-header">
         <div class="window-controls">
           <button class="btn-close" onclick="closeWindow('win-guestbook')">×</button>
         </div>
-        <div class="window-title">GUESTBOOK</div>
+        <div class="window-title">PUBLIC GUESTBOOK</div>
       </div>
       <div class="window-body guestbook-layout">
         <div class="guestbook-input-area">
-          <p>Sign the message board anonymously!</p>
+          <p>Sign the board anonymously:</p>
           <input type="text" id="guestbook-input" placeholder="Type message & hit Enter...">
         </div>
         <div class="guestbook-list" id="guestbook-messages">
@@ -234,7 +217,7 @@
           </div>
           <div class="guest-message">
             <strong>Anon</strong> <span class="gb-time">10:04</span>
-            <p>I love the music player and the visual visualizer visualizer...</p>
+            <p>I love the Walkman player visualizer visualizer...</p>
           </div>
         </div>
       </div>
@@ -243,34 +226,29 @@
 
   </main>
 
-  <!-- Bottom Dock Taskbar -->
+  <!-- Bottom Dock Taskbar (With Minimal Retro Pixel Icons) -->
   <footer id="dock">
     <button class="dock-item" onclick="openWindow('win-about')">
-      <span class="dock-icon">👤</span>
+      <!-- 16x16 Pixel Icon Simulation -->
+      <span class="dock-px-icon i-about"></span>
       <span class="dock-label">About</span>
     </button>
     <button class="dock-item" onclick="openWindow('win-music')">
-      <span class="dock-icon">📻</span>
+      <span class="dock-px-icon i-music"></span>
       <span class="dock-label">Music</span>
     </button>
-    <button class="dock-item" onclick="openWindow('win-instagram')">
-      <span class="dock-icon">📷</span>
-      <span class="dock-label">Instagram</span>
-    </button>
     <a href="https://linkedin.com" target="_blank" class="dock-item">
-      <span class="dock-icon">💼</span>
+      <span class="dock-px-icon i-linked"></span>
       <span class="dock-label">LinkedIn</span>
     </a>
     <button class="dock-item" onclick="openWindow('win-writings')">
-      <span class="dock-icon">📝</span>
-      <span class="dock-label">Writings</span>
+      <span class="dock-px-icon i-writings"></span>
+      <span class="dock-label">Opinions</span>
     </button>
-    <!-- SOKA Vacation Style Button -->
-    <button class="dock-item soka-dock-item" onclick="openWindow('win-soka')">
-      <span class="dock-icon soka-icon-box">SOKA</span>
+    <button class="dock-item" onclick="openWindow('win-soka')">
+      <span class="dock-px-icon i-soka"></span>
       <span class="dock-label">SOKA</span>
     </button>
-    <!-- Guestbook Button -->
     <button class="dock-item" onclick="openWindow('win-guestbook')">
       <span class="dock-icon">📓</span>
       <span class="dock-label">Guestbook</span>
