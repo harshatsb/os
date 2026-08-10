@@ -5,85 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Harshat Singh | Portfolio</title>
   <style>
-    /* 1. BASE STYLES & BACKGROUND */
+    /* 1. BASE STYLES & GRAINY BACKGROUND */
     body {
       margin: 0;
-      overflow: hidden; /* Prevents scrollbars so cards can drift cleanly */
-      background: radial-gradient(circle at 50% 50%, #7d934a 0%, #1c2a15 100%); /* Green mood-board gradient */
+      overflow: hidden;
+      background-color: #e4e4e4;
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      color: white;
+      color: #1a1a1a;
+      user-select: none;
     }
 
-    /* 2. TOP CORNER LINKS */
+    /* SVG Noise Overlay */
+    .noise-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.6;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+    }
+
+    /* 2. NAVIGATION & FOOTER */
     .top-links {
       position: fixed;
       top: 25px;
-      left: 25px;
+      right: 35px;
       z-index: 1000;
       display: flex;
       gap: 15px;
-      font-size: 13px;
+      font-size: 11px;
       letter-spacing: 0.5px;
     }
+    
     .top-links a {
-      color: #ffffff;
+      color: #1a1a1a;
       text-decoration: none;
-      opacity: 0.8;
+      opacity: 0.7;
       transition: opacity 0.2s ease;
     }
+    
     .top-links a:hover {
       opacity: 1;
     }
 
-    /* 3. THE CANVAS & DRIFTING CARDS */
+    .footer {
+      position: fixed;
+      bottom: 25px;
+      right: 35px;
+      z-index: 1000;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      opacity: 0.7;
+    }
+
+    /* 3. THE CANVAS & CARDS */
     #canvas {
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
-      transition: filter 0.4s ease; /* Smooth blur transition */
+      transition: filter 0.4s ease;
+      cursor: grab;
+    }
+
+    #canvas:active {
+      cursor: grabbing;
     }
     
     .is-blurred {
-      filter: blur(10px);
-      pointer-events: none; /* Prevents clicking cards in the background */
+      filter: blur(12px);
+      pointer-events: none;
     }
 
     .card {
       position: absolute;
-      width: 180px; /* Small base size */
+      width: 130px;       /* Smaller portrait size */
+      height: 190px;
       cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      will-change: transform, left, top;
+      will-change: transform, left;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card-image-container {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      background: #ccc; 
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    /* Title half on / half off */
+    .card-title {
+      position: absolute;
+      bottom: 30px;
+      left: 70%;          /* Pushes text off the right edge */
+      width: 160px;       /* Gives text room to breathe outside */
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 500;
+      pointer-events: none;
+      z-index: 10;
+      color: #1a1a1a;
+    }
+
+    .card:hover {
+      transform: scale(1.04);
+      z-index: 100 !important;
+    }
+
+    /* 4. MINIMAL SCRUBBER */
+    .scrubber-wrapper {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .scrubber-track {
+      width: 100%;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .scrubber-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 4px;
+      background: #1a1a1a;
+      border-radius: 2px;
+      cursor: grab;
+      transition: left 0.1s ease-out;
     }
     
-    .card img, .card video {
-      width: 100%;
-      height: auto;
-      display: block;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    .scrubber-handle:active {
+      cursor: grabbing;
     }
 
-    /* Hover "Floating" Effect */
-    .card:hover {
-      transform: scale(1.08);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-      z-index: 100 !important; /* Brings hovered card to the absolute front */
-    }
-
-    /* 4. EXPANDED MODAL OVERLAY */
+    /* 5. EXPANDED TEXT OVERLAY */
     #overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(228, 228, 228, 0.4);
       z-index: 2000;
       display: flex;
       justify-content: center;
       align-items: center;
       opacity: 1;
       transition: opacity 0.4s ease;
+      cursor: pointer;
     }
     
     #overlay.hidden {
@@ -91,124 +185,185 @@
       pointer-events: none;
     }
 
-    .expanded-content img, .expanded-content video {
-      max-width: 85vw;
-      max-height: 85vh;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    .expanded-text {
+      max-width: 600px;
+      font-size: 18px;
+      line-height: 1.6;
+      text-align: center;
+      color: #1a1a1a;
+      padding: 40px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation Links -->
+  <div class="noise-overlay"></div>
+
   <nav class="top-links">
     <a href="https://www.linkedin.com/in/harshatsingh" target="_blank">[ li ]</a>
     <a href="https://www.legalbysoka.com" target="_blank">[ soka ]</a>
+    <a href="mailto:13.harshat@gmail.com">[ email ]</a>
   </nav>
 
-  <!-- Drifting Canvas -->
   <div id="canvas"></div>
 
-  <!-- Click/Expand Overlay -->
+  <div class="scrubber-wrapper">
+    <div class="scrubber-track" id="scrubber-track">
+      <div class="scrubber-handle" id="scrubber-handle"></div>
+    </div>
+  </div>
+
+  <div class="footer">© harshat 2026</div>
+
   <div id="overlay" class="hidden">
-    <div class="expanded-content" id="expanded-content"></div>
+    <div class="expanded-text" id="expanded-text"></div>
   </div>
 
   <script>
-    // --- YOUR CONTENT DATA FILE ---
-    // Easily add new writings, drafts, or UI wireframes here.
+    // --- CONTENT DATA (Legal placeholders) ---
     const portfolioData = [
-      { type: 'image', src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500', link: '' },
-      { type: 'image', src: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500', link: '' },
-      { type: 'image', src: 'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=500', link: '' },
-      { type: 'image', src: 'https://images.unsplash.com/photo-1524169358666-79f22534bc6e?q=80&w=500', link: '' },
-      { type: 'image', src: 'https://images.unsplash.com/photo-1606170033648-5d55a3edf314?q=80&w=500', link: '' }
+      { title: 'The Black Box Dilemma: AI & Corporate Liability', src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500', fullText: 'An extensive overview of assigning corporate liability when autonomous AI systems execute actionable financial decisions.' },
+      { title: 'Enforcement Frameworks in Digital Forensics', src: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500', fullText: 'Draft outlining the procedural barriers in digital forgery litigation and establishing chain-of-custody for volatile data.' },
+      { title: 'Blockchain Contracts & The Right to be Forgotten', src: 'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=500', fullText: 'Analyzing the fundamental clash between immutable ledger architecture and the GDPR right to data erasure.' },
+      { title: 'Cyber Warfare & International Humanitarian Law', src: 'https://images.unsplash.com/photo-1524169358666-79f22534bc6e?q=80&w=500', fullText: 'A conceptual framework for defining acts of digital infrastructure sabotage under the Geneva Conventions.' },
+      { title: 'Metadata & Virtual Property Rights', src: 'https://images.unsplash.com/photo-1606170033648-5d55a3edf314?q=80&w=500', fullText: 'Appellate brief exploring the property dynamics of user-generated metadata within closed ecosystem platforms.' },
+      { title: 'Regulatory Approaches to Financial Algorithms', src: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=500', fullText: 'Litigation strategies and regulatory insights regarding high-frequency trading algorithms and market manipulation.' }
     ];
 
     const canvas = document.getElementById('canvas');
     const overlay = document.getElementById('overlay');
-    const expandedContent = document.getElementById('expanded-content');
+    const expandedText = document.getElementById('expanded-text');
     
     let cards = [];
-    let isGlobalPaused = false; // Controls the main drift freeze
+    const BASE_SPEED = 0.4;
+    let dragSpeed = 0;
+    let isGlobalPaused = false;
 
-    // --- 1. GENERATE & PLACE CARDS ---
+    // --- 1. GENERATE & SCATTER CARDS ---
+    // Spread them over a wide virtual width so there is plenty of white space
+    const virtualWidth = window.innerWidth * 2.5; 
+
     portfolioData.forEach((item, i) => {
       const el = document.createElement('div');
       el.className = 'card';
-      el.innerHTML = `<img src="${item.src}" alt="Portfolio Cover">`;
       
-      // Randomize starting positions
-      const cardWidth = 180;
-      let x = Math.random() * (window.innerWidth - cardWidth);
-      let y = Math.random() * (window.innerHeight - 250);
+      el.innerHTML = `
+        <div class="card-image-container">
+          <img src="${item.src}" alt="${item.title}">
+        </div>
+        <div class="card-title">${item.title}</div>
+      `;
       
-      // Randomize drift speed and direction
-      let vx = (Math.random() - 0.5) * 1.2; 
-      let vy = (Math.random() - 0.5) * 1.2;
-
-      el.style.left = x + 'px';
+      let x = Math.random() * virtualWidth;
+      // Keep cards comfortably within the vertical bounds
+      let y = 100 + Math.random() * (window.innerHeight - 350); 
+      
       el.style.top = y + 'px';
-      
-      // Stagger z-index slightly so they overlap nicely
-      el.style.zIndex = Math.floor(Math.random() * 10);
-      
+      el.style.zIndex = Math.floor(Math.random() * 20);
       canvas.appendChild(el);
 
-      // --- INTERACTION LOGIC ---
-      let isHovered = false;
-      
-      // Pause individual card on hover
-      el.addEventListener('mouseenter', () => isHovered = true);
-      el.addEventListener('mouseleave', () => isHovered = false);
-
-      // Expand card on click
-      el.addEventListener('click', () => {
+      // Expand to text-only mode on click
+      el.addEventListener('click', (e) => {
+        if(Math.abs(dragSpeed) > 1) return; // Prevent clicking while dragging canvas heavily
+        e.stopPropagation(); // Prevent canvas drag from firing
         isGlobalPaused = true;
         canvas.classList.add('is-blurred');
         overlay.classList.remove('hidden');
         
-        if (item.type === 'image') {
-          expandedContent.innerHTML = `<img src="${item.src}">`;
-        } 
-        // Logic for external links can be added here
+        expandedText.innerHTML = `<h2>${item.title}</h2><p>${item.fullText}</p>`;
       });
 
-      cards.push({ el, x, y, vx, vy, isHovered, cardWidth });
+      cards.push({ el, x });
     });
 
-    // --- 2. THE CONTINUOUS DRIFT ANIMATION ---
+    // --- 2. MOVEMENT & ANIMATION LOOP ---
     function animate() {
       if (!isGlobalPaused) {
+        // Smoothly decay drag/scrub speed back to base speed
+        dragSpeed *= 0.92; 
+        let currentSpeed = BASE_SPEED + dragSpeed;
+
         cards.forEach(card => {
-          if (!card.isHovered) {
-            // Move card
-            card.x += card.vx;
-            card.y += card.vy;
+          card.x += currentSpeed;
 
-            // Bounce smoothly off the edges of the screen
-            if (card.x <= 0 || card.x >= window.innerWidth - card.cardWidth) card.vx *= -1;
-            if (card.y <= 0 || card.y >= window.innerHeight - (card.cardWidth * 1.4)) card.vy *= -1;
-
-            card.el.style.left = card.x + 'px';
-            card.el.style.top = card.y + 'px';
+          // Wrap around logic (moves infinitely left to right)
+          if (card.x > window.innerWidth + 200) {
+            card.x = -200;
+          } else if (card.x < -200) {
+            card.x = window.innerWidth + 200;
           }
+
+          card.el.style.left = card.x + 'px';
         });
       }
-      requestAnimationFrame(animate); // Loops the animation natively
+      requestAnimationFrame(animate);
     }
-    
-    // Start animation loop
     animate();
 
-    // --- 3. CLOSE EXPANDED VIEW ---
+    // --- 3. CANVAS DRAG LOGIC ---
+    let isDraggingCanvas = false;
+    let lastCanvasX = 0;
+
+    canvas.addEventListener('mousedown', (e) => {
+      if (isGlobalPaused) return;
+      isDraggingCanvas = true;
+      lastCanvasX = e.clientX;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingCanvas) {
+        const deltaX = e.clientX - lastCanvasX;
+        dragSpeed = deltaX * 0.15; // Translates mouse movement to canvas speed
+        lastCanvasX = e.clientX;
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDraggingCanvas = false;
+    });
+
+    // --- 4. BOTTOM SCRUBBER LOGIC ---
+    const scrubberHandle = document.getElementById('scrubber-handle');
+    const scrubberTrack = document.getElementById('scrubber-track');
+    let isDraggingScrubber = false;
+    let trackCenter = 0;
+
+    scrubberHandle.addEventListener('mousedown', (e) => {
+      e.stopPropagation();
+      isDraggingScrubber = true;
+      const rect = scrubberTrack.getBoundingClientRect();
+      trackCenter = rect.left + rect.width / 2;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isDraggingScrubber) {
+        let offsetX = e.clientX - trackCenter;
+        
+        // Constrain handle to the 120px track (-60 to 60)
+        if (offsetX > 60) offsetX = 60;
+        if (offsetX < -60) offsetX = -60;
+        
+        scrubberHandle.style.left = `calc(50% + ${offsetX}px)`;
+        
+        // Translate scrubber position to canvas speed
+        dragSpeed = offsetX * 0.2; 
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDraggingScrubber) {
+        isDraggingScrubber = false;
+        // Snap back to middle smoothly
+        scrubberHandle.style.left = '50%';
+      }
+    });
+
+    // --- 5. CLOSE EXPANDED VIEW ---
     overlay.addEventListener('click', () => {
       isGlobalPaused = false;
       canvas.classList.remove('is-blurred');
       overlay.classList.add('hidden');
-      
-      // Clear content to stop videos from playing in background
-      setTimeout(() => { expandedContent.innerHTML = ''; }, 400);
+      setTimeout(() => { expandedText.innerHTML = ''; }, 400);
     });
 
   </script>
