@@ -16,7 +16,7 @@ function simulateOsSetup() {
       // Hide Loader and show desktop with a slight delay
       setTimeout(() => {
         bootLoader.style.display = 'none';
-        openWindow('win-about'); // Open System Info on boot
+        openWindow('win-writings'); // Open Opinions on boot as primary content
       }, 500);
     }
     
@@ -87,7 +87,7 @@ document.querySelectorAll('.window').forEach(win => {
   });
 });
 
-// Audio Playlist Manager (Mute, Vol added)
+// Audio Playlist Manager (Volume Control added)
 const playlist = [
   { title: "01. Lofi Chill Beats (Acoustic)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
   { title: "02. Synthwave Sunset (1988)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -160,12 +160,12 @@ const articles = {
   a2: {
     title: "Founding SOKA: Redefining Modern Legal Practice",
     meta: "May 2026 // Legal Innovation // Founder Notes",
-    content: "<p>SOKA was established with a singular vision: combining deep legal rigour with modern, streamlined execution. Our mission is to eliminate archaic complexities in legal service delivery.</p>"
+    content: "<p>SOKA was established with a singular vision: combining deep legal rigour with streamlined execution. Our mission is to eliminate archaic complexities in legal service delivery.</p>"
   },
   a3: {
     title: "Reflections on Tinkering: Why Lawyers Should Code",
     meta: "January 2026 // Personal Essays",
-    content: "<p>The constructs of legal drafting and software development share the exact same foundation: logic, conditionals, and structure. Tinkering with code refines the precision with which we construct contracts and arguments.</p>"
+    content: "<p>Legal drafting and software development share the exact same foundation: logic, conditionals, and structure. Tinkering with code refines the precision with which we construct contracts and legal arguments.</p>"
   }
 };
 
@@ -186,7 +186,7 @@ function showWritingsIndex() {
   document.getElementById('writings-reader-view').style.display = 'none';
 }
 
-// Guestbook Management (Sign anonymoulsy)
+// Guestbook Management (Sign anonymously)
 const guestbookMessages = document.getElementById('guestbook-messages');
 const guestbookInput = document.getElementById('guestbook-input');
 
