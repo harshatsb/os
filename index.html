@@ -3,261 +3,214 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Harshat's // Opinions, Law & SOKA</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=VT323&display=swap" rel="stylesheet">
+  <title>Harshat Singh | Portfolio</title>
+  <style>
+    /* 1. BASE STYLES & BACKGROUND */
+    body {
+      margin: 0;
+      overflow: hidden; /* Prevents scrollbars so cards can drift cleanly */
+      background: radial-gradient(circle at 50% 50%, #7d934a 0%, #1c2a15 100%); /* Green mood-board gradient */
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: white;
+    }
+
+    /* 2. TOP CORNER LINKS */
+    .top-links {
+      position: fixed;
+      top: 25px;
+      left: 25px;
+      z-index: 1000;
+      display: flex;
+      gap: 15px;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+    .top-links a {
+      color: #ffffff;
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+    .top-links a:hover {
+      opacity: 1;
+    }
+
+    /* 3. THE CANVAS & DRIFTING CARDS */
+    #canvas {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      transition: filter 0.4s ease; /* Smooth blur transition */
+    }
+    
+    .is-blurred {
+      filter: blur(10px);
+      pointer-events: none; /* Prevents clicking cards in the background */
+    }
+
+    .card {
+      position: absolute;
+      width: 180px; /* Small base size */
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      will-change: transform, left, top;
+    }
+    
+    .card img, .card video {
+      width: 100%;
+      height: auto;
+      display: block;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Hover "Floating" Effect */
+    .card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+      z-index: 100 !important; /* Brings hovered card to the absolute front */
+    }
+
+    /* 4. EXPANDED MODAL OVERLAY */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+    
+    #overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .expanded-content img, .expanded-content video {
+      max-width: 85vw;
+      max-height: 85vh;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Retro Setup / Boot Loader Sequence -->
-  <div id="os-boot-loader">
-    <div class="boot-modal">
-      <div class="modal-header">Workstation Boot // v3.1</div>
-      <div class="modal-body">
-        <p>Loading Harshat's digital environment...</p>
-        <div class="progress-bar-container">
-          <div class="progress-bar-dither" id="boot-progress"></div>
-        </div>
-        <p class="status-text">Mounting volumes... <span id="boot-percent">0</span>%</p>
-      </div>
-    </div>
+  <!-- Navigation Links -->
+  <nav class="top-links">
+    <a href="https://www.linkedin.com/in/harshatsingh" target="_blank">[ li ]</a>
+    <a href="https://www.legalbysoka.com" target="_blank">[ soka ]</a>
+  </nav>
+
+  <!-- Drifting Canvas -->
+  <div id="canvas"></div>
+
+  <!-- Click/Expand Overlay -->
+  <div id="overlay" class="hidden">
+    <div class="expanded-content" id="expanded-content"></div>
   </div>
 
-  <!-- Top Status Bar -->
-  <header id="top-bar">
-    <div class="top-bar-left">
-      <span class="system-status">● HARSHAT'S DIGITAL WORKSTATION</span>
-    </div>
-    <div class="top-bar-right">
-      <!-- Clicking this does NOT open any window, as requested -->
-      <span id="clock">THU 6 AUG 2026 19:26</span>
-    </div>
-  </header>
+  <script>
+    // --- YOUR CONTENT DATA FILE ---
+    // Easily add new writings, drafts, or UI wireframes here.
+    const portfolioData = [
+      { type: 'image', src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500', link: '' },
+      { type: 'image', src: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500', link: '' },
+      { type: 'image', src: 'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=500', link: '' },
+      { type: 'image', src: 'https://images.unsplash.com/photo-1524169358666-79f22534bc6e?q=80&w=500', link: '' },
+      { type: 'image', src: 'https://images.unsplash.com/photo-1606170033648-5d55a3edf314?q=80&w=500', link: '' }
+    ];
 
-  <!-- Main Desktop Canvas -->
-  <main id="desktop">
+    const canvas = document.getElementById('canvas');
+    const overlay = document.getElementById('overlay');
+    const expandedContent = document.getElementById('expanded-content');
+    
+    let cards = [];
+    let isGlobalPaused = false; // Controls the main drift freeze
 
-    <!-- Unnamed Pinned Quote Widget (Top Right) -->
-    <aside class="pinned-widget desktop-note">
-      <div class="widget-body">
-        <p>"Lawyers, I suppose, were children once."</p>
-        <p class="note-meta">— Charles Lamb</p>
-      </div>
-    </aside>
+    // --- 1. GENERATE & PLACE CARDS ---
+    portfolioData.forEach((item, i) => {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = `<img src="${item.src}" alt="Portfolio Cover">`;
+      
+      // Randomize starting positions
+      const cardWidth = 180;
+      let x = Math.random() * (window.innerWidth - cardWidth);
+      let y = Math.random() * (window.innerHeight - 250);
+      
+      // Randomize drift speed and direction
+      let vx = (Math.random() - 0.5) * 1.2; 
+      let vy = (Math.random() - 0.5) * 1.2;
 
-    <!-- Opinions Window (Newsroom Style) -->
-    <div class="window resizable writings-style" id="win-writings" style="top: 60px; left: 160px; width: 560px; height: 450px;">
-      <div class="window-header writings-header">
-        <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-writings')">×</button>
-          <button class="btn-minimize" onclick="closeWindow('win-writings')">_</button>
-        </div>
-        <div class="window-title">OPINIONS // PUBLIC NOTES & ESSAYS</div>
-      </div>
-      <div class="window-body editorial-content">
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      
+      // Stagger z-index slightly so they overlap nicely
+      el.style.zIndex = Math.floor(Math.random() * 10);
+      
+      canvas.appendChild(el);
+
+      // --- INTERACTION LOGIC ---
+      let isHovered = false;
+      
+      // Pause individual card on hover
+      el.addEventListener('mouseenter', () => isHovered = true);
+      el.addEventListener('mouseleave', () => isHovered = false);
+
+      // Expand card on click
+      el.addEventListener('click', () => {
+        isGlobalPaused = true;
+        canvas.classList.add('is-blurred');
+        overlay.classList.remove('hidden');
         
-        <div id="writings-list-view">
-          <div class="newsroom-masthead"><h1>OPINIONS</h1></div>
-          <p class="writings-subtitle">Notes on Constitutional Law, Legal Innovation, SOKA, and Tech.</p>
-          <hr>
-          <div class="writings-index">
-            <div class="index-item" onclick="readArticle('a1')">
-              <div class="thumb-dither">⚖️</div>
-              <div class="index-info">
-                <h3>The Future of Legal Tech & AI in Indian Courts</h3>
-                <span class="art-date">6 AUG 2026</span>
-              </div>
-            </div>
-            <div class="index-item" onclick="readArticle('a2')">
-              <div class="thumb-dither">🏢</div>
-              <div class="index-info">
-                <h3>Founding SOKA: Redefining Modern Legal Practice</h3>
-                <span class="art-date">21 MAY 2026</span>
-              </div>
-            </div>
-            <div class="index-item" onclick="readArticle('a3')">
-              <div class="thumb-dither">Code</div>
-              <div class="index-info">
-                <h3>Reflections on Tinkering: Why Lawyers Should Code</h3>
-                <span class="art-date">14 JAN 2026</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        if (item.type === 'image') {
+          expandedContent.innerHTML = `<img src="${item.src}">`;
+        } 
+        // Logic for external links can be added here
+      });
 
-        <!-- Single Article Reader View -->
-        <div id="writings-reader-view" style="display: none;">
-          <button onclick="showWritingsIndex()" class="btn-back">← Back to Opinions Index</button>
-          <h1 id="article-heading">Article Title</h1>
-          <p id="article-meta">Date // Category</p>
-          <hr>
-          <div id="article-body-text" class="article-text-content">
-            <!-- Dynamically Injected -->
-          </div>
-        </div>
+      cards.push({ el, x, y, vx, vy, isHovered, cardWidth });
+    });
 
-      </div>
-      <div class="window-footer">Writings are verified // For educational purpose only</div>
-    </div>
+    // --- 2. THE CONTINUOUS DRIFT ANIMATION ---
+    function animate() {
+      if (!isGlobalPaused) {
+        cards.forEach(card => {
+          if (!card.isHovered) {
+            // Move card
+            card.x += card.vx;
+            card.y += card.vy;
 
-    <!-- SOKA Window (Vacation Style) -->
-    <div class="window soka-style" id="win-soka" style="top: 280px; left: 740px; width: 340px; height: 320px; display: none;">
-      <div class="window-header soka-header">
-        <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-soka')">×</button>
-        </div>
-        <div class="window-title">SOKA // A LEGAL STUDIO</div>
-      </div>
-      <div class="window-body soka-layout">
-        <div class="soka-visual">SOKA</div>
-        <div class="soka-content-text">
-          <p>SOKA: A Legal Studio is a modern legal practice built for India's creative industry.</p>
-          <p>We partner with artists, musicians, filmmakers, writers, and digital creators to navigate the complex legal landscape of their work.</p>
-          <a href="https://www.legalbysoka.com" target="_blank" class="soka-link-btn">Visit www.legalbysoka.com</a>
-        </div>
-      </div>
-    </div>
+            // Bounce smoothly off the edges of the screen
+            if (card.x <= 0 || card.x >= window.innerWidth - card.cardWidth) card.vx *= -1;
+            if (card.y <= 0 || card.y >= window.innerHeight - (card.cardWidth * 1.4)) card.vy *= -1;
 
-    <!-- Music Player Window (Expanded) -->
-    <div class="window" id="win-music" style="top: 100px; left: 560px; width: 400px; height: 420px; display: none;">
-      <div class="window-header">
-        <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-music')">×</button>
-          <button class="btn-minimize" onclick="closeWindow('win-music')">_</button>
-        </div>
-        <div class="window-title">HI-FI AUDIO DECK v1.2</div>
-      </div>
-      <div class="window-body">
-        
-        <!-- Retro Visualizer Display -->
-        <div class="visualizer-screen">
-          <div class="visualizer-header">
-            <span id="now-playing-title">► Track 01: Lofi Waves</span>
-            <span id="track-time">0:00</span>
-          </div>
-          <div class="equalizer-bars" id="eq-bars">
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          </div>
-        </div>
+            card.el.style.left = card.x + 'px';
+            card.el.style.top = card.y + 'px';
+          }
+        });
+      }
+      requestAnimationFrame(animate); // Loops the animation natively
+    }
+    
+    // Start animation loop
+    animate();
 
-        <!-- Controls (Vol added) -->
-        <div class="music-controls-panel">
-          <div class="btn-row">
-            <button onclick="prevTrack()" title="Previous Track">⏮</button>
-            <button onclick="toggleAudio()" id="play-btn" class="primary-btn">▶ Play</button>
-            <button onclick="nextTrack()" title="Next Track">⏭</button>
-            <button onclick="toggleMute()" id="mute-btn">🔊</button>
-          </div>
-          <div class="volume-row">
-            <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8" oninput="changeVolume(this.value)">
-          </div>
-        </div>
+    // --- 3. CLOSE EXPANDED VIEW ---
+    overlay.addEventListener('click', () => {
+      isGlobalPaused = false;
+      canvas.classList.remove('is-blurred');
+      overlay.classList.add('hidden');
+      
+      // Clear content to stop videos from playing in background
+      setTimeout(() => { expandedContent.innerHTML = ''; }, 400);
+    });
 
-        <audio id="audio-element" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-
-        <!-- Scrollable Tracklist -->
-        <div class="tracklist-container">
-          <div class="tracklist-header">PLAYLIST QUEUE</div>
-          <ul id="playlist-ul">
-            <li class="active" onclick="playTrack(0)">01. Lofi Chill Beats (Acoustic)</li>
-            <li onclick="playTrack(1)">02. Synthwave Sunset (1988)</li>
-            <li onclick="playTrack(2)">03. Supreme Court Chambers Lofi</li>
-            <li onclick="playTrack(3)">04. Jalandhar Rain Ambient</li>
-            <li onclick="playTrack(4)">05. Midnight Code & Law Study</li>
-            <li onclick="playTrack(5)">06. Retro Radio Wave Broadcast</li>
-          </ul>
-        </div>
-      </div>
-      <div class="window-footer">Analog Simulation // Stereo Output</div>
-    </div>
-
-    <!-- Guestbook Window -->
-    <div class="window resizable" id="win-guestbook" style="top: 180px; left: 820px; width: 360px; height: 380px; display: none;">
-      <div class="window-header guestbook-header">
-        <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-guestbook')">×</button>
-        </div>
-        <div class="window-title">PUBLIC GUESTBOOK</div>
-      </div>
-      <div class="window-body guestbook-layout">
-        <div class="guestbook-input-area">
-          <p>Sign the board anonymously:</p>
-          <input type="text" id="guestbook-input" placeholder="Type message & hit Enter...">
-        </div>
-        <div class="guestbook-list" id="guestbook-messages">
-          <div class="guest-message">
-            <strong>Anon</strong> <span class="gb-time">13:12</span>
-            <p>Nice workstation, Harshat.</p>
-          </div>
-          <div class="guest-message">
-            <strong>Anon</strong> <span class="gb-time">10:04</span>
-            <p>I appreciate the clean aesthetic...</p>
-          </div>
-        </div>
-      </div>
-      <div class="window-footer">2 messages found // Public Board</div>
-    </div>
-
-    <!-- About Window ("Harshat's", simplified) -->
-    <div class="window" id="win-about" style="top: 80px; left: 100px; width: 420px; height: 280px; display: none;">
-      <div class="window-header">
-        <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-about')">×</button>
-          <button class="btn-minimize" onclick="closeWindow('win-about')">_</button>
-        </div>
-        <div class="window-title">HARSHAT'S // PROFILE</div>
-      </div>
-      <div class="window-body system-about-layout">
-        <div class="system-info-block">
-          <h3>USER DEFINITION</h3>
-          <p>NAME: Harshat</p>
-          <p>ROLE: Lawyer, Supreme Court of India</p>
-          <p>FOUNDER: SOKA</p>
-          <p>CONTACT: <a href="mailto:13.harshat@gmail.com">13.harshat@gmail.com</a></p>
-        </div>
-        <div class="system-info-block">
-          <h3>ENVIRONMENT</h3>
-          <p>Workstation: Harshat's v3.1</p>
-          <p>Build: Aug 2026 // Production</p>
-        </div>
-      </div>
-      <div class="window-footer">Minimal Retro GUI // Copyright 2026</div>
-    </div>
-
-  </main>
-
-  <!-- Bottom Dock Taskbar (With Minimal Retro Pixel Icons) -->
-  <footer id="dock">
-    <button class="dock-item" onclick="openWindow('win-writings')">
-      <span class="dock-px-icon i-writings"></span>
-      <span class="dock-label">Opinions</span>
-    </button>
-    <button class="dock-item" onclick="openWindow('win-soka')">
-      <span class="dock-px-icon i-soka"></span>
-      <span class="dock-label">SOKA</span>
-    </button>
-    <button class="dock-item" onclick="openWindow('win-music')">
-      <span class="dock-px-icon i-music"></span>
-      <span class="dock-label">Music</span>
-    </button>
-    <a href="https://linkedin.com" target="_blank" class="dock-item">
-      <span class="dock-px-icon i-linked"></span>
-      <span class="dock-label">LinkedIn</span>
-    </a>
-    <button class="dock-item" onclick="openWindow('win-guestbook')">
-      <span class="dock-px-icon i-guest"></span>
-      <span class="dock-label">Guestbook</span>
-    </button>
-    <button class="dock-item" onclick="openWindow('win-about')">
-      <span class="dock-px-icon i-about"></span>
-      <span class="dock-label">About</span>
-    </button>
-  </footer>
-
-  <script src="script.js"></script>
+  </script>
 </body>
 </html>
