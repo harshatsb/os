@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Harshat_OS // Digital Workstation v3.0</title>
+  <title>Harshat's // Opinions, Law & SOKA</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,13 +14,13 @@
   <!-- Retro Setup / Boot Loader Sequence -->
   <div id="os-boot-loader">
     <div class="boot-modal">
-      <div class="modal-header">System Setup // Boot v3.0</div>
+      <div class="modal-header">Workstation Boot // v3.1</div>
       <div class="modal-body">
-        <p>Loading Harshat_OS configuration...</p>
+        <p>Loading Harshat's digital environment...</p>
         <div class="progress-bar-container">
           <div class="progress-bar-dither" id="boot-progress"></div>
         </div>
-        <p class="status-text">Mounting Digital Workstation... <span id="boot-percent">0</span>%</p>
+        <p class="status-text">Mounting volumes... <span id="boot-percent">0</span>%</p>
       </div>
     </div>
   </div>
@@ -28,50 +28,101 @@
   <!-- Top Status Bar -->
   <header id="top-bar">
     <div class="top-bar-left">
-      <span class="system-status">● HARSHAT_OS v3.0</span>
-      <span class="system-status">| DIGITAL WORKSTATION</span>
+      <span class="system-status">● HARSHAT'S DIGITAL WORKSTATION</span>
     </div>
     <div class="top-bar-right">
-      <!-- Clicking this opens win-about -->
-      <span id="clock" onclick="openWindow('win-about')" title="System Info">THU 6 AUG 2026 19:26</span>
+      <!-- Clicking this does NOT open any window, as requested -->
+      <span id="clock">THU 6 AUG 2026 19:26</span>
     </div>
   </header>
 
   <!-- Main Desktop Canvas -->
   <main id="desktop">
 
-    <!-- About Window (Simplified System Info style) -->
-    <div class="window" id="win-about" style="top: 80px; left: 100px; width: 420px; height: 320px;">
-      <div class="window-header">
+    <!-- Unnamed Pinned Quote Widget (Top Right) -->
+    <aside class="pinned-widget desktop-note">
+      <div class="widget-body">
+        <p>"Lawyers, I suppose, were children once."</p>
+        <p class="note-meta">— Charles Lamb</p>
+      </div>
+    </aside>
+
+    <!-- Opinions Window (Newsroom Style) -->
+    <div class="window resizable writings-style" id="win-writings" style="top: 60px; left: 160px; width: 560px; height: 450px;">
+      <div class="window-header writings-header">
         <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-about')">×</button>
-          <button class="btn-minimize" onclick="closeWindow('win-about')">_</button>
+          <button class="btn-close" onclick="closeWindow('win-writings')">×</button>
+          <button class="btn-minimize" onclick="closeWindow('win-writings')">_</button>
         </div>
-        <div class="window-title">SYSTEM ABOUT // CONFIGURATION</div>
+        <div class="window-title">OPINIONS // PUBLIC NOTES & ESSAYS</div>
       </div>
-      <div class="window-body">
-        <div class="system-about-layout">
-          <div class="system-info-block">
-            <h3>USER DEFINITION</h3>
-            <p>NAME: Harshat</p>
-            <p>ROLE: Lawyer, Supreme Court of India</p>
-            <p>ORIGIN: Punjab | CURRENT: Delhi, IN</p>
-            <p>CONTACT: <a href="mailto:13.harshat@gmail.com">13.harshat@gmail.com</a></p>
-          </div>
-          <div class="system-info-block">
-            <h3>SYSTEM METRICS</h3>
-            <p>OS: Harshat_OS v3.0</p>
-            <p>ENVIRONMENT: Minimal Retro GUI</p>
-            <p>BUILD: Aug 2026 // Production</p>
+      <div class="window-body editorial-content">
+        
+        <div id="writings-list-view">
+          <div class="newsroom-masthead"><h1>OPINIONS</h1></div>
+          <p class="writings-subtitle">Notes on Constitutional Law, Legal Innovation, SOKA, and Tech.</p>
+          <hr>
+          <div class="writings-index">
+            <div class="index-item" onclick="readArticle('a1')">
+              <div class="thumb-dither">⚖️</div>
+              <div class="index-info">
+                <h3>The Future of Legal Tech & AI in Indian Courts</h3>
+                <span class="art-date">6 AUG 2026</span>
+              </div>
+            </div>
+            <div class="index-item" onclick="readArticle('a2')">
+              <div class="thumb-dither">🏢</div>
+              <div class="index-info">
+                <h3>Founding SOKA: Redefining Modern Legal Practice</h3>
+                <span class="art-date">21 MAY 2026</span>
+              </div>
+            </div>
+            <div class="index-item" onclick="readArticle('a3')">
+              <div class="thumb-dither">Code</div>
+              <div class="index-info">
+                <h3>Reflections on Tinkering: Why Lawyers Should Code</h3>
+                <span class="art-date">14 JAN 2026</span>
+              </div>
+            </div>
           </div>
         </div>
+
+        <!-- Single Article Reader View -->
+        <div id="writings-reader-view" style="display: none;">
+          <button onclick="showWritingsIndex()" class="btn-back">← Back to Opinions Index</button>
+          <h1 id="article-heading">Article Title</h1>
+          <p id="article-meta">Date // Category</p>
+          <hr>
+          <div id="article-body-text" class="article-text-content">
+            <!-- Dynamically Injected -->
+          </div>
+        </div>
+
       </div>
-      <div class="window-footer">Copyright 1986-2026 Harshat Ltd. All rights reserved.</div>
+      <div class="window-footer">Writings are verified // For educational purpose only</div>
     </div>
 
-    <!-- Music Player Window (Walkman/Hardware styled) -->
-    <div class="window music-walkman" id="win-music" style="top: 100px; left: 560px; width: 340px; height: 440px;">
-      <div class="window-header music-header">
+    <!-- SOKA Window (Vacation Style) -->
+    <div class="window soka-style" id="win-soka" style="top: 280px; left: 740px; width: 340px; height: 320px; display: none;">
+      <div class="window-header soka-header">
+        <div class="window-controls">
+          <button class="btn-close" onclick="closeWindow('win-soka')">×</button>
+        </div>
+        <div class="window-title">SOKA // A LEGAL STUDIO</div>
+      </div>
+      <div class="window-body soka-layout">
+        <div class="soka-visual">SOKA</div>
+        <div class="soka-content-text">
+          <p>SOKA: A Legal Studio is a modern legal practice built for India's creative industry.</p>
+          <p>We partner with artists, musicians, filmmakers, writers, and digital creators to navigate the complex legal landscape of their work.</p>
+          <a href="https://www.legalbysoka.com" target="_blank" class="soka-link-btn">Visit www.legalbysoka.com</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Music Player Window (Expanded) -->
+    <div class="window" id="win-music" style="top: 100px; left: 560px; width: 400px; height: 420px; display: none;">
+      <div class="window-header">
         <div class="window-controls">
           <button class="btn-close" onclick="closeWindow('win-music')">×</button>
           <button class="btn-minimize" onclick="closeWindow('win-music')">_</button>
@@ -124,79 +175,6 @@
       <div class="window-footer">Analog Simulation // Stereo Output</div>
     </div>
 
-    <!-- Opinions Window (Simplified Newsroom Style) -->
-    <div class="window resizable" id="win-writings" style="top: 60px; left: 160px; width: 560px; height: 450px;">
-      <div class="window-header writings-header">
-        <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-writings')">×</button>
-          <button class="btn-minimize" onclick="closeWindow('win-writings')">_</button>
-        </div>
-        <div class="window-title">OPINIONS // PUBLIC NOTES</div>
-      </div>
-      <div class="window-body editorial-content">
-        
-        <div id="writings-list-view">
-          <div class="newsroom-masthead"><h1>OPINIONS</h1></div>
-          <p class="writings-subtitle">Notes on Constitutional Law, Legal Innovation, SOKA, and Retro-Tech.</p>
-          <hr>
-          <div class="writings-index">
-            <div class="index-item" onclick="readArticle('a1')">
-              <div class="thumb-dither">📷</div>
-              <div class="index-info">
-                <h3>The Future of Legal Tech & AI in Indian Courts</h3>
-                <span class="art-date">6 AUG 2026</span>
-              </div>
-            </div>
-            <div class="index-item" onclick="readArticle('a2')">
-              <div class="thumb-dither">⚖️</div>
-              <div class="index-info">
-                <h3>Founding SOKA: Redefining Modern Legal Practice</h3>
-                <span class="art-date">21 MAY 2026</span>
-              </div>
-            </div>
-            <div class="index-item" onclick="readArticle('a3')">
-              <div class="thumb-dither">Office</div>
-              <div class="index-info">
-                <h3>Reflections on Tinkering: Why Lawyers Should Code</h3>
-                <span class="art-date">14 JAN 2026</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Single Article Reader View (Hidden initially) -->
-        <div id="writings-reader-view" style="display: none;">
-          <button onclick="showWritingsIndex()" class="btn-back">← Back to Index</button>
-          <h1 id="article-heading">Article Title</h1>
-          <p id="article-meta">Date // Category</p>
-          <hr>
-          <div id="article-body-text">
-            <!-- Dynamically Injected -->
-          </div>
-        </div>
-
-      </div>
-      <div class="window-footer">Writings are verified // For educational purpose only</div>
-    </div>
-
-    <!-- SOKA Window (Optimized Copy) -->
-    <div class="window" id="win-soka" style="top: 280px; left: 700px; width: 320px; height: 300px; display: none;">
-      <div class="window-header soka-header">
-        <div class="window-controls">
-          <button class="btn-close" onclick="closeWindow('win-soka')">×</button>
-        </div>
-        <div class="window-title">SOKA // A LEGAL STUDIO</div>
-      </div>
-      <div class="window-body soka-layout">
-        <div class="soka-visual">SOKA</div>
-        <div class="soka-content-text">
-          <p>SOKA: A Legal Studio is a modern, Delhi-based legal practice built for India's creative industry.</p>
-          <p>We partner with artists, musicians, filmmakers, writers, and digital creators to navigate the complex legal landscape of their creative work.</p>
-          <a href="https://www.legalbysoka.com" target="_blank" class="soka-link-btn">Visit www.legalbysoka.com</a>
-        </div>
-      </div>
-    </div>
-
     <!-- Guestbook Window -->
     <div class="window resizable" id="win-guestbook" style="top: 180px; left: 820px; width: 360px; height: 380px; display: none;">
       <div class="window-header guestbook-header">
@@ -213,25 +191,54 @@
         <div class="guestbook-list" id="guestbook-messages">
           <div class="guest-message">
             <strong>Anon</strong> <span class="gb-time">13:12</span>
-            <p>Nice OS, Harshat!</p>
+            <p>Nice workstation, Harshat.</p>
           </div>
           <div class="guest-message">
             <strong>Anon</strong> <span class="gb-time">10:04</span>
-            <p>I love the Walkman player visualizer visualizer...</p>
+            <p>I appreciate the clean aesthetic...</p>
           </div>
         </div>
       </div>
       <div class="window-footer">2 messages found // Public Board</div>
     </div>
 
+    <!-- About Window ("Harshat's", simplified) -->
+    <div class="window" id="win-about" style="top: 80px; left: 100px; width: 420px; height: 280px; display: none;">
+      <div class="window-header">
+        <div class="window-controls">
+          <button class="btn-close" onclick="closeWindow('win-about')">×</button>
+          <button class="btn-minimize" onclick="closeWindow('win-about')">_</button>
+        </div>
+        <div class="window-title">HARSHAT'S // PROFILE</div>
+      </div>
+      <div class="window-body system-about-layout">
+        <div class="system-info-block">
+          <h3>USER DEFINITION</h3>
+          <p>NAME: Harshat</p>
+          <p>ROLE: Lawyer, Supreme Court of India</p>
+          <p>FOUNDER: SOKA</p>
+          <p>CONTACT: <a href="mailto:13.harshat@gmail.com">13.harshat@gmail.com</a></p>
+        </div>
+        <div class="system-info-block">
+          <h3>ENVIRONMENT</h3>
+          <p>Workstation: Harshat's v3.1</p>
+          <p>Build: Aug 2026 // Production</p>
+        </div>
+      </div>
+      <div class="window-footer">Minimal Retro GUI // Copyright 2026</div>
+    </div>
+
   </main>
 
   <!-- Bottom Dock Taskbar (With Minimal Retro Pixel Icons) -->
   <footer id="dock">
-    <button class="dock-item" onclick="openWindow('win-about')">
-      <!-- 16x16 Pixel Icon Simulation -->
-      <span class="dock-px-icon i-about"></span>
-      <span class="dock-label">About</span>
+    <button class="dock-item" onclick="openWindow('win-writings')">
+      <span class="dock-px-icon i-writings"></span>
+      <span class="dock-label">Opinions</span>
+    </button>
+    <button class="dock-item" onclick="openWindow('win-soka')">
+      <span class="dock-px-icon i-soka"></span>
+      <span class="dock-label">SOKA</span>
     </button>
     <button class="dock-item" onclick="openWindow('win-music')">
       <span class="dock-px-icon i-music"></span>
@@ -241,17 +248,13 @@
       <span class="dock-px-icon i-linked"></span>
       <span class="dock-label">LinkedIn</span>
     </a>
-    <button class="dock-item" onclick="openWindow('win-writings')">
-      <span class="dock-px-icon i-writings"></span>
-      <span class="dock-label">Opinions</span>
-    </button>
-    <button class="dock-item" onclick="openWindow('win-soka')">
-      <span class="dock-px-icon i-soka"></span>
-      <span class="dock-label">SOKA</span>
-    </button>
     <button class="dock-item" onclick="openWindow('win-guestbook')">
-      <span class="dock-icon">📓</span>
+      <span class="dock-px-icon i-guest"></span>
       <span class="dock-label">Guestbook</span>
+    </button>
+    <button class="dock-item" onclick="openWindow('win-about')">
+      <span class="dock-px-icon i-about"></span>
+      <span class="dock-label">About</span>
     </button>
   </footer>
 
