@@ -1,9 +1,10 @@
-/* Custom Retro Cursor Definition (The Classic Black Arrow) */
+/* Custom Retro Cursor (The Classic Black Arrow) */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   user-select: none;
+  /* Reverted to standard arrow cursor from interactive hands, per request */
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black" stroke="white" stroke-width="1.5"><path d="M12 2l-3 3h6l-3-3zm0 20l3-3h-6l3 3zm10-10l-3-3v6l3-3zM2 12l3 3v-6l-3 3z"/></svg>'), auto !important;
 }
 
@@ -40,7 +41,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100000; /* Must be on top of everything */
+  z-index: 100000; /* Above everything */
 }
 
 .boot-modal {
@@ -112,12 +113,7 @@ body::after {
 }
 
 #clock {
-  cursor: pointer;
-}
-
-#clock:hover {
-  background: #2b2625;
-  color: #fdfaf3;
+  cursor: default; /* Not clickable now */
 }
 
 /* Desktop Canvas */
@@ -125,6 +121,38 @@ body::after {
   position: relative;
   height: calc(100vh - 88px);
   width: 100vw;
+}
+
+/* Pinned Desktop Note Widget */
+.pinned-widget {
+  position: fixed;
+  background-color: #fff8ca; /* Classic Yellow Note */
+  border: 1px solid #c7b659;
+  width: 200px;
+  padding: 15px;
+  font-family: 'Playfair Display', serif;
+  z-index: 1; /* Sits on desktop layer */
+  /* Subtle dither border */
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.desktop-note {
+  top: 40px; /* Below clock */
+  right: 12px;
+}
+
+.desktop-note p {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #2b2625;
+}
+
+.desktop-note .note-meta {
+  margin-top: 10px;
+  font-size: 12px;
+  font-style: italic;
+  text-align: right;
+  color: #555;
 }
 
 /* Window Component Styling */
@@ -200,7 +228,7 @@ body::after {
   background-color: #f5efe3;
 }
 
-/* System About Layout (Win3.1 style properties) */
+/* System About Layout (win-about, simplified) */
 .system-about-layout {
   display: flex;
   flex-direction: column;
@@ -387,6 +415,17 @@ body::after {
   font-size: 14px;
 }
 
+/* Article Reader Module */
+.article-text-content {
+  font-family: 'Playfair Display', serif;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.article-text-content p {
+  margin-bottom: 12px;
+}
+
 .btn-back {
   padding: 4px 8px;
   background: #2b2625;
@@ -489,11 +528,12 @@ body::after {
 }
 
 /* Specific monochrome pixel icons simulations */
-.i-about { background-image: radial-gradient(#6cf08a 0.5px, transparent 0.5px); } /* Verified */
+.i-writings { background-image: radial-gradient(#eee 0.5px, transparent 0.5px); } /* Text */
+.i-soka { background-color: #0b3c5d; background-image: none; border-color: #000;} /* SOKA */
 .i-music { background-image: radial-gradient(#d1c7bc 0.5px, transparent 0.5px); } /* Neutral */
 .i-linked { background-color: #0b3c5d; background-image: none;} /* Professional Royal Blue */
-.i-soka { background-color: #0b3c5d; background-image: none; border-color: #000;} /* SOKA */
-.i-writings { background-image: radial-gradient(#eee 0.5px, transparent 0.5px); } /* Text */
+.i-guest { background-image: radial-gradient(#aaa 0.5px, transparent 0.5px); } /* Book */
+.i-about { background-image: radial-gradient(#6cf08a 0.5px, transparent 0.5px); } /* Verified */
 
 /* Bottom Dock */
 #dock {
