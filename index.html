@@ -83,8 +83,8 @@
 
     .card {
       position: absolute;
-      width: 130px;
-      height: 190px;
+      width: 110px;       /* Slightly smaller */
+      height: 160px;      /* Slightly smaller */
       cursor: pointer;
       will-change: transform, left;
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -109,9 +109,9 @@
     /* Title half on / half off */
     .card-title {
       position: absolute;
-      bottom: 30px;
-      left: 70%;
-      width: 160px;
+      bottom: 20px;
+      left: 65%;          /* Pushes text off the right edge */
+      width: 150px;       /* Constrains the text wrap outside */
       font-size: 11px;
       line-height: 1.4;
       font-weight: 500;
@@ -222,12 +222,12 @@
   <script>
     // --- CONTENT DATA ---
     const portfolioData = [
-      { title: 'The Black Box Dilemma: AI & Corporate Liability', src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500', fullText: 'An extensive overview of assigning corporate liability when autonomous AI systems execute actionable financial decisions.' },
-      { title: 'Enforcement Frameworks in Digital Forensics', src: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500', fullText: 'Draft outlining the procedural barriers in digital forgery litigation and establishing chain-of-custody for volatile data.' },
-      { title: 'Blockchain Contracts & The Right to be Forgotten', src: 'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=500', fullText: 'Analyzing the fundamental clash between immutable ledger architecture and the GDPR right to data erasure.' },
-      { title: 'Cyber Warfare & International Humanitarian Law', src: 'https://images.unsplash.com/photo-1524169358666-79f22534bc6e?q=80&w=500', fullText: 'A conceptual framework for defining acts of digital infrastructure sabotage under the Geneva Conventions.' },
+      { title: 'Financial Regulations & Enforcement Frameworks', src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500', fullText: 'An analysis of evolving financial regulatory structures and enforcement mechanisms in contemporary litigation.' },
+      { title: 'Digital Court Fee Calculator: Tool Architecture', src: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500', fullText: 'UX flow and functional documentation for an automated court fee calculation utility.' },
+      { title: 'Dozer: Professional Freelancing Platform MVP', src: 'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=500', fullText: 'Feature flows and growth strategies conceptualized for the Dozer application interface.' },
+      { title: 'The Black Box Dilemma: AI & Corporate Liability', src: 'https://images.unsplash.com/photo-1524169358666-79f22534bc6e?q=80&w=500', fullText: 'An extensive overview of assigning corporate liability when autonomous systems execute actionable decisions.' },
       { title: 'Metadata & Virtual Property Rights', src: 'https://images.unsplash.com/photo-1606170033648-5d55a3edf314?q=80&w=500', fullText: 'Appellate brief exploring the property dynamics of user-generated metadata within closed ecosystem platforms.' },
-      { title: 'Regulatory Approaches to Financial Algorithms', src: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=500', fullText: 'Litigation strategies and regulatory insights regarding high-frequency trading algorithms and market manipulation.' }
+      { title: 'Procedural Barriers in Digital Forensics', src: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=500', fullText: 'Draft outlining the procedural barriers in digital forgery litigation and establishing chain-of-custody for volatile data.' }
     ];
 
     const canvas = document.getElementById('canvas');
@@ -239,9 +239,13 @@
     let dragSpeed = 0;
     let isGlobalPaused = false;
 
-    // --- 1. GENERATE & SCATTER CARDS WITH WIDE SPACING ---
-    const virtualWidth = window.innerWidth * 3.5; // Massive virtual width
-    const segmentWidth = virtualWidth / portfolioData.length; // Ensure they are spaced out horizontally
+    // --- 1. STRICT SPACING LOGIC ---
+    const virtualWidth = window.innerWidth * 4.5; // Massive horizontal space
+    const segmentWidth = virtualWidth / portfolioData.length; 
+    
+    // Staggered Y-axis percentages to prevent straight horizontal lines
+    // e.g., Top, Bottom, Middle, High, Low, Middle
+    const yStaggers = [0.15, 0.75, 0.45, 0.20, 0.80, 0.50];
 
     portfolioData.forEach((item, i) => {
       const el = document.createElement('div');
@@ -254,11 +258,17 @@
         <div class="card-title">${item.title}</div>
       `;
       
-      // Place horizontally within its dedicated segment to prevent clustering
-      let x = (i * segmentWidth) + (Math.random() * (segmentWidth - 250));
+      // X: Lock the card to the middle 60% of its dedicated segment so segments never touch
+      let safeSegmentStart = (i * segmentWidth) + (segmentWidth * 0.2);
+      let x = safeSegmentStart + (Math.random() * (segmentWidth * 0.6));
       
-      // Utilize full vertical space, keeping 100px clear at top and 250px clear at bottom
-      let y = 100 + Math.random() * (window.innerHeight - 350); 
+      // Y: Use the staggered array to force extreme vertical separation
+      let staggerMultiplier = yStaggers[i % yStaggers.length];
+      let maxSafeY = window.innerHeight - 250; 
+      let minSafeY = 100; 
+      
+      // Apply the stagger, plus a tiny bit of randomness so it doesn't feel robotic
+      let y = minSafeY + (staggerMultiplier * (maxSafeY - minSafeY)) + ((Math.random() - 0.5) * 30); 
       
       el.style.top = y + 'px';
       el.style.zIndex = Math.floor(Math.random() * 20);
@@ -286,7 +296,6 @@
         cards.forEach(card => {
           card.x += currentSpeed;
 
-          // Wrap around smoothly across the massive virtual width
           if (card.x > virtualWidth) {
             card.x = -200;
           } else if (card.x < -200) {
