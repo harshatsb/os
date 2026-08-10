@@ -83,7 +83,7 @@
 
     .card {
       position: absolute;
-      width: 130px;       /* Smaller portrait size */
+      width: 130px;
       height: 190px;
       cursor: pointer;
       will-change: transform, left;
@@ -110,8 +110,8 @@
     .card-title {
       position: absolute;
       bottom: 30px;
-      left: 70%;          /* Pushes text off the right edge */
-      width: 160px;       /* Gives text room to breathe outside */
+      left: 70%;
+      width: 160px;
       font-size: 11px;
       line-height: 1.4;
       font-weight: 500;
@@ -220,7 +220,7 @@
   </div>
 
   <script>
-    // --- CONTENT DATA (Legal placeholders) ---
+    // --- CONTENT DATA ---
     const portfolioData = [
       { title: 'The Black Box Dilemma: AI & Corporate Liability', src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500', fullText: 'An extensive overview of assigning corporate liability when autonomous AI systems execute actionable financial decisions.' },
       { title: 'Enforcement Frameworks in Digital Forensics', src: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500', fullText: 'Draft outlining the procedural barriers in digital forgery litigation and establishing chain-of-custody for volatile data.' },
@@ -239,9 +239,9 @@
     let dragSpeed = 0;
     let isGlobalPaused = false;
 
-    // --- 1. GENERATE & SCATTER CARDS ---
-    // Spread them over a wide virtual width so there is plenty of white space
-    const virtualWidth = window.innerWidth * 2.5; 
+    // --- 1. GENERATE & SCATTER CARDS WITH WIDE SPACING ---
+    const virtualWidth = window.innerWidth * 3.5; // Massive virtual width
+    const segmentWidth = virtualWidth / portfolioData.length; // Ensure they are spaced out horizontally
 
     portfolioData.forEach((item, i) => {
       const el = document.createElement('div');
@@ -254,18 +254,19 @@
         <div class="card-title">${item.title}</div>
       `;
       
-      let x = Math.random() * virtualWidth;
-      // Keep cards comfortably within the vertical bounds
+      // Place horizontally within its dedicated segment to prevent clustering
+      let x = (i * segmentWidth) + (Math.random() * (segmentWidth - 250));
+      
+      // Utilize full vertical space, keeping 100px clear at top and 250px clear at bottom
       let y = 100 + Math.random() * (window.innerHeight - 350); 
       
       el.style.top = y + 'px';
       el.style.zIndex = Math.floor(Math.random() * 20);
       canvas.appendChild(el);
 
-      // Expand to text-only mode on click
       el.addEventListener('click', (e) => {
-        if(Math.abs(dragSpeed) > 1) return; // Prevent clicking while dragging canvas heavily
-        e.stopPropagation(); // Prevent canvas drag from firing
+        if(Math.abs(dragSpeed) > 1) return; 
+        e.stopPropagation(); 
         isGlobalPaused = true;
         canvas.classList.add('is-blurred');
         overlay.classList.remove('hidden');
@@ -279,18 +280,17 @@
     // --- 2. MOVEMENT & ANIMATION LOOP ---
     function animate() {
       if (!isGlobalPaused) {
-        // Smoothly decay drag/scrub speed back to base speed
         dragSpeed *= 0.92; 
         let currentSpeed = BASE_SPEED + dragSpeed;
 
         cards.forEach(card => {
           card.x += currentSpeed;
 
-          // Wrap around logic (moves infinitely left to right)
-          if (card.x > window.innerWidth + 200) {
+          // Wrap around smoothly across the massive virtual width
+          if (card.x > virtualWidth) {
             card.x = -200;
           } else if (card.x < -200) {
-            card.x = window.innerWidth + 200;
+            card.x = virtualWidth;
           }
 
           card.el.style.left = card.x + 'px';
@@ -313,7 +313,7 @@
     window.addEventListener('mousemove', (e) => {
       if (isDraggingCanvas) {
         const deltaX = e.clientX - lastCanvasX;
-        dragSpeed = deltaX * 0.15; // Translates mouse movement to canvas speed
+        dragSpeed = deltaX * 0.15; 
         lastCanvasX = e.clientX;
       }
     });
@@ -339,13 +339,10 @@
       if (isDraggingScrubber) {
         let offsetX = e.clientX - trackCenter;
         
-        // Constrain handle to the 120px track (-60 to 60)
         if (offsetX > 60) offsetX = 60;
         if (offsetX < -60) offsetX = -60;
         
         scrubberHandle.style.left = `calc(50% + ${offsetX}px)`;
-        
-        // Translate scrubber position to canvas speed
         dragSpeed = offsetX * 0.2; 
       }
     });
@@ -353,7 +350,6 @@
     window.addEventListener('mouseup', () => {
       if (isDraggingScrubber) {
         isDraggingScrubber = false;
-        // Snap back to middle smoothly
         scrubberHandle.style.left = '50%';
       }
     });
