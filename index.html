@@ -46,7 +46,7 @@
       transform: translate(-50%, -50%) scale(2.5);
     }
 
-    /* Header Logo (Larger & Higher Placement) */
+    /* Header Logo */
     .header-fixed {
       position: fixed;
       top: 0.6rem;
@@ -74,7 +74,7 @@
       opacity: 1;
     }
 
-    /* Bottom Navigation (Restored plain styling) */
+    /* Bottom Navigation */
     .nav-fixed {
       position: fixed;
       bottom: 2.5rem;
@@ -162,6 +162,11 @@
       color: #ffffff;
     }
 
+    .brand-bold {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
     .editorial-sub {
       font-size: 1.1rem;
       line-height: 1.7;
@@ -210,7 +215,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Standalone One-Liner Interstitials */
+    /* Standalone Uppercase Two-Line Interstitials */
     .interstitial-section {
       min-height: 100vh;
       display: flex;
@@ -221,11 +226,12 @@
     }
 
     .one-liner {
-      font-size: 2.5rem;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.3;
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 1.4;
       color: #ffffff;
+      text-transform: uppercase;
       max-width: 900px;
       z-index: 10;
     }
@@ -277,7 +283,7 @@
       border-color: #ffffff;
     }
 
-    /* Giant Brand Footer Section */
+    /* Giant Brand Footer Section (Proportional Aspect Ratio Corrected) */
     #brand-footer {
       min-height: 100vh;
       display: flex;
@@ -291,7 +297,7 @@
 
     .giant-logo-container {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1000px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -300,9 +306,10 @@
     }
 
     .giant-logo-container img {
-      width: 100%;
-      height: auto;
-      max-height: 55vh;
+      width: auto;
+      max-width: 90vw;
+      height: 38vh; /* Keeps height proportional to prevent distortion */
+      object-fit: contain;
       filter: brightness(0) invert(1);
       display: block;
       opacity: 0.95;
@@ -313,14 +320,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 2rem;
+      margin-top: 3rem;
       font-size: 0.85rem;
       letter-spacing: 0.05em;
       color: #d0d0d0;
       font-weight: 400;
     }
 
-    /* Modals (Disclaimer & Focus Modal) */
+    /* Modals */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -427,9 +434,8 @@
   <!-- About Section -->
   <section id="about">
     <div class="content-box">
-      <span class="section-label">01 / Overview</span>
       <p class="editorial-lead">
-        OpenRecord is a legal practice advising creators and artists across India’s creative economy.
+        <strong class="brand-bold">OpenRecord</strong> is a legal practice advising creators and artists across India’s creative economy.
       </p>
       <p class="editorial-sub">
         We work across contracts, disputes and legal advisory, with a focus on the commercial and legal structures behind creative work.
@@ -454,15 +460,17 @@
     </div>
   </section>
 
-  <!-- One-Liner Interstitial 1 -->
+  <!-- Uppercase Two-Line Interstitial 1 -->
   <div class="interstitial-section">
-    <h2 class="one-liner">The things we create deserve to last.</h2>
+    <h2 class="one-liner">
+      The things we create<br>deserve to last.
+    </h2>
   </div>
 
   <!-- Practice Section -->
   <section id="practices">
     <div class="content-box">
-      <span class="section-label">02 / Practice Areas</span>
+      <span class="section-label">Practice Areas</span>
       <div class="practice-grid">
         <div class="practice-item">
           <h3 class="practice-title">Contracts</h3>
@@ -486,15 +494,16 @@
     </div>
   </section>
 
-  <!-- One-Liner Interstitial 2 -->
+  <!-- Uppercase Two-Line Interstitial 2 -->
   <div class="interstitial-section">
-    <h2 class="one-liner">Creation matters. So does the record behind it.</h2>
+    <h2 class="one-liner">
+      Creation matters.<br>So does the record behind it.
+    </h2>
   </div>
 
   <!-- Contact Section -->
   <section id="contact">
     <div class="content-box">
-      <span class="section-label">03 / Communication</span>
       <p class="editorial-lead">
         For legal enquiries, advisory and engagements, get in touch.
       </p>
