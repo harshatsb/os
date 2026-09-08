@@ -9,7 +9,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      cursor: none; /* Hide default cursor for custom cursor */
+      cursor: none; /* Custom cursor used across the entire site */
     }
 
     html {
@@ -25,58 +25,61 @@
       background-color: #505050;
     }
 
-    /* Custom White Circle/Dot Cursor */
+    /* Custom Cursor Dot */
     #custom-cursor {
       position: fixed;
       top: 0;
       left: 0;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       background-color: #ffffff;
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
       transform: translate(-50%, -50%);
-      transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+      transition: transform 0.15s ease-out, background-color 0.15s ease-out;
       mix-blend-mode: difference;
     }
 
-    #custom-cursor.hovered {
-      width: 24px;
-      height: 24px;
-      opacity: 0.8;
+    body.hovering #custom-cursor {
+      transform: translate(-50%, -50%) scale(2.5);
     }
 
-    /* Fixed Top-Left Logo */
+    /* Fixed Top Left Header Logo */
     .header-fixed {
       position: fixed;
-      top: 2.5rem;
+      top: 2rem;
       left: 2.5rem;
-      z-index: 1000;
+      z-index: 100;
       background: transparent;
       pointer-events: auto;
     }
 
+    .header-fixed a {
+      display: block;
+      text-decoration: none;
+    }
+
     .header-fixed img {
-      height: 70px; /* Significantly enlarged */
+      height: 64px; /* Significantly larger */
       width: auto;
       display: block;
-      /* Turn SVG completely white */
-      filter: brightness(0) invert(1);
+      filter: brightness(0) invert(1); /* Forces SVG to render completely #ffffff white */
+      opacity: 0.95;
       transition: opacity 0.2s ease;
     }
 
     .header-fixed img:hover {
-      opacity: 0.8;
+      opacity: 1;
     }
 
-    /* Fixed Bottom Navigation */
+    /* Fixed Transparent Navigation (Bottom Centered) */
     .nav-fixed {
       position: fixed;
       bottom: 2.5rem;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 1000;
+      z-index: 100;
       background: transparent;
       display: flex;
       gap: 2rem;
@@ -98,7 +101,7 @@
       opacity: 1;
     }
 
-    /* Viewport Layout */
+    /* Viewport Sections */
     section {
       width: 100vw;
       min-height: 100vh;
@@ -110,6 +113,7 @@
       padding: 6rem 2rem;
     }
 
+    /* Hero Canvas Section */
     #hero {
       padding: 0;
       overflow: hidden;
@@ -126,8 +130,7 @@
     }
 
     #canvas-container.blurred {
-      filter: blur(12px) brightness(0.5);
-      pointer-events: none; /* Prevents canvas cards from intercepting modal clicks */
+      filter: blur(16px) brightness(0.6);
     }
 
     /* Content Layout */
@@ -141,7 +144,7 @@
       font-size: 0.7rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
-      color: #bbbbbb;
+      color: #a0a0a0;
       margin-bottom: 2rem;
       display: block;
     }
@@ -158,24 +161,24 @@
     .section-body {
       font-size: 0.95rem;
       line-height: 1.8;
-      color: #dddddd;
+      color: #d0d0d0;
       font-weight: 300;
     }
 
-    /* Focus Modal & Backdrop */
+    /* Focus Modal Overlay */
     #overlay-modal {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 2000;
+      z-index: 500; /* Elevated above WebGL canvas interactions */
       pointer-events: none;
       opacity: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.25);
       backdrop-filter: blur(8px);
       transition: opacity 0.4s ease;
     }
@@ -189,14 +192,13 @@
       text-align: center;
       max-width: 440px;
       width: 85%;
-      padding: 3rem 2.5rem 2rem 2.5rem;
+      padding: 3rem 2.5rem 2.5rem 2.5rem;
       background: rgba(30, 30, 30, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       transform: translateY(15px);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      position: relative;
     }
 
     #overlay-modal.active .modal-content {
@@ -204,15 +206,16 @@
     }
 
     .modal-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       margin-bottom: 0.75rem;
       font-weight: 400;
       letter-spacing: 0.02em;
+      color: #ffffff;
     }
 
     .modal-desc {
       font-size: 0.85rem;
-      color: #cccccc;
+      color: #b0b0b0;
       line-height: 1.6;
       margin-bottom: 2.5rem;
     }
@@ -221,15 +224,19 @@
       background: transparent;
       color: #ffffff;
       border: none;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      transition: opacity 0.2s ease;
-      font-weight: 500;
+      font-weight: 600;
+      opacity: 0.7;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      display: inline-block;
+      padding: 0.5rem 1rem;
     }
 
     .close-btn:hover {
-      opacity: 0.6;
+      opacity: 1;
+      transform: scale(1.1);
     }
   </style>
 
@@ -243,16 +250,16 @@
 
   <!-- Top Left Logo Button -->
   <div class="header-fixed">
-    <a href="#hero" class="interactive">
+    <a href="#hero" class="clickable">
       <img src="OpenRecord logo.svg" alt="OpenRecord Logo" />
     </a>
   </div>
 
   <!-- Bottom Navigation -->
   <nav class="nav-fixed">
-    <a href="#about" class="interactive">[ ABOUT ]</a>
-    <a href="#practices" class="interactive">[ PRACTICES ]</a>
-    <a href="#contact" class="interactive">[ CONTACT ]</a>
+    <a href="#about" class="clickable">[ ABOUT ]</a>
+    <a href="#practices" class="clickable">[ PRACTICES ]</a>
+    <a href="#contact" class="clickable">[ CONTACT ]</a>
   </nav>
 
   <!-- Hero 3D Canvas Viewport -->
@@ -291,17 +298,17 @@
       <h2 class="section-title">Direct Inquiries</h2>
       <p class="section-body">
         For retainer arrangements, advice, or counsel, get in touch via email:<br><br>
-        <a href="mailto:office@openrecord.law" class="interactive" style="color: #ffffff; text-decoration: underline;">office@openrecord.law</a>
+        <a href="mailto:office@openrecord.law" class="clickable" style="color: #ffffff; text-decoration: underline;">office@openrecord.law</a>
       </p>
     </div>
   </section>
 
-  <!-- Interaction Modal -->
+  <!-- Focus Modal Overlay -->
   <div id="overlay-modal">
-    <div class="modal-content" id="modal-card">
+    <div class="modal-content">
       <h2 class="modal-title" id="modal-title">Record Item</h2>
       <p class="modal-desc" id="modal-desc">Detailed legal record or case metadata placeholder.</p>
-      <button class="close-btn interactive" id="close-btn">[ X ]</button>
+      <button class="close-btn clickable" id="close-btn">[ X ]</button>
     </div>
   </div>
 
@@ -309,25 +316,34 @@
     // --- Custom Cursor Handling ---
     const cursor = document.getElementById('custom-cursor');
 
-    document.addEventListener('mousemove', (e) => {
+    window.addEventListener('mousemove', (e) => {
       cursor.style.left = `${e.clientX}px`;
       cursor.style.top = `${e.clientY}px`;
     });
 
-    const setHoverListeners = () => {
-      document.querySelectorAll('a, button, .interactive').forEach(el => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-      });
-    };
-    setHoverListeners();
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+        document.body.classList.add('hovering');
+      }
+    });
 
-    // --- Three.js Configuration ---
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+        document.body.classList.remove('hovering');
+      }
+    });
+
+    // --- Configuration ---
     const TOTAL_CARDS = 38;
     const SPHERE_RADIUS = 18;
     const CARD_WIDTH = 3.5;
     const CARD_HEIGHT = 4.5;
+    
+    // Zoom boundary limits
+    const MIN_ZOOM = 22;
+    const MAX_ZOOM = 65;
 
+    // --- Scene Setup ---
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     
@@ -349,14 +365,14 @@
       canvas.height = 640;
       const ctx = canvas.getContext('2d');
 
-      ctx.fillStyle = '#2b2b2b';
+      ctx.fillStyle = '#1e1e1e';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = '#444444';
+      ctx.strokeStyle = '#3a3a3a';
       ctx.lineWidth = 12;
       ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#a0a0a0';
       ctx.font = '24px monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -402,7 +418,7 @@
       cards.push(mesh);
     }
 
-    // --- Interactive Sphere Controls ---
+    // --- Interaction Mechanics ---
     let isDragging = false;
     let previousMousePosition = { x: 0, y: 0 };
     let rotationVelocity = { x: 0.0008, y: 0.0012 };
@@ -437,14 +453,15 @@
 
     window.addEventListener('mouseup', () => { isDragging = false; });
 
-    // Scroll Wheel Zoom Mechanics
+    // Scroll Zooming with Minimum / Maximum Expansion Limits
     window.addEventListener('wheel', (e) => {
       if (isFocused || window.scrollY > 100) return;
+      
       camera.position.z += e.deltaY * 0.025;
-      camera.position.z = Math.max(22, Math.min(65, camera.position.z));
-    });
+      camera.position.z = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, camera.position.z));
+    }, { passive: true });
 
-    // Raycast Selection
+    // Click Selection
     window.addEventListener('click', (e) => {
       if (isFocused || window.scrollY > 100) return;
 
@@ -456,9 +473,9 @@
       }
     });
 
-    // --- Focus Modal Overlay Controls ---
+    // --- Modal Overlay Controls ---
     const modal = document.getElementById('overlay-modal');
-    const modalCard = document.getElementById('modal-card');
+    const modalContent = document.querySelector('.modal-content');
     const modalTitle = document.getElementById('modal-title');
     const modalDesc = document.getElementById('modal-desc');
     const closeBtn = document.getElementById('close-btn');
@@ -476,18 +493,16 @@
       isFocused = false;
       container.classList.remove('blurred');
       modal.classList.remove('active');
-      cursor.classList.remove('hovered');
     }
 
-    // Close via [ X ] Button
     closeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       resetFocus();
     });
 
-    // Close when clicking backdrop outside content container
+    // Close Modal on clicking outside the content card
     modal.addEventListener('click', (e) => {
-      if (!modalCard.contains(e.target)) {
+      if (!modalContent.contains(e.target)) {
         resetFocus();
       }
     });
@@ -512,7 +527,7 @@
 
     animate();
 
-    // Resize Handler
+    // Window Resize
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
