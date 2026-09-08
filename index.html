@@ -13,6 +13,7 @@
     }
 
     html {
+      scroll-behavior: smooth;
       background-color: #505050;
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -45,10 +46,10 @@
       transform: translate(-50%, -50%) scale(2.5);
     }
 
-    /* Fixed Header Logo */
+    /* Header Logo (Larger & Higher Placement) */
     .header-fixed {
       position: fixed;
-      top: 1.2rem;
+      top: 0.6rem;
       left: 1.8rem;
       z-index: 100;
       background: transparent;
@@ -61,7 +62,7 @@
     }
 
     .header-fixed img {
-      height: 110px;
+      height: 130px;
       width: auto;
       display: block;
       filter: brightness(0) invert(1);
@@ -73,18 +74,14 @@
       opacity: 1;
     }
 
-    /* Navigation (Bottom Centered) */
+    /* Bottom Navigation (Restored plain styling) */
     .nav-fixed {
       position: fixed;
       bottom: 2.5rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
-      background: rgba(40, 40, 40, 0.4);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0.75rem 1.5rem;
-      border-radius: 40px;
+      background: transparent;
       display: flex;
       gap: 2rem;
       pointer-events: auto;
@@ -138,7 +135,7 @@
       filter: blur(16px) brightness(0.6);
     }
 
-    /* Typography & Editorial Content Styling */
+    /* Typography & Layout */
     .content-box {
       max-width: 720px;
       width: 100%;
@@ -161,7 +158,7 @@
       font-weight: 300;
       line-height: 1.5;
       letter-spacing: -0.01em;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       color: #ffffff;
     }
 
@@ -170,9 +167,70 @@
       line-height: 1.7;
       color: #d0d0d0;
       font-weight: 300;
+      margin-bottom: 2rem;
     }
 
-    /* Practice Area Grid Layout */
+    /* Expandable Dropdown Mechanism */
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      display: inline-block;
+      margin-top: 1rem;
+      font-weight: 500;
+    }
+
+    .toggle-btn:hover {
+      opacity: 1;
+    }
+
+    .expandable-text {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      opacity: 0;
+    }
+
+    .expandable-text.expanded {
+      max-height: 1000px;
+      opacity: 1;
+      margin-top: 2rem;
+    }
+
+    .expandable-text p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #c0c0c0;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Standalone One-Liner Interstitials */
+    .interstitial-section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 2rem;
+    }
+
+    .one-liner {
+      font-size: 2.5rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: #ffffff;
+      max-width: 900px;
+      z-index: 10;
+    }
+
+    /* Practice Area Items */
     .practice-grid {
       display: flex;
       flex-direction: column;
@@ -219,35 +277,78 @@
       border-color: #ffffff;
     }
 
-    /* Focus Modal Overlay */
-    #overlay-modal {
+    /* Giant Brand Footer Section */
+    #brand-footer {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 100vw;
+      padding: 4rem 2rem;
+    }
+
+    .giant-logo-container {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .giant-logo-container img {
+      width: 100%;
+      height: auto;
+      max-height: 55vh;
+      filter: brightness(0) invert(1);
+      display: block;
+      opacity: 0.95;
+    }
+
+    .giant-footer-meta {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      color: #d0d0d0;
+      font-weight: 400;
+    }
+
+    /* Modals (Disclaimer & Focus Modal) */
+    .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 500;
+      z-index: 600;
       pointer-events: none;
       opacity: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
       transition: opacity 0.4s ease;
     }
 
-    #overlay-modal.active {
+    .modal-overlay.active {
       opacity: 1;
       pointer-events: auto;
     }
 
     .modal-content {
       text-align: center;
-      max-width: 440px;
+      max-width: 500px;
       width: 85%;
-      padding: 3rem 2.5rem 2.5rem 2.5rem;
-      background: rgba(30, 30, 30, 0.88);
+      padding: 3.5rem 2.5rem 2.5rem 2.5rem;
+      background: rgba(30, 30, 30, 0.92);
       backdrop-filter: blur(24px);
       border: 1px solid rgba(255, 255, 255, 0.12);
       transform: translateY(15px);
@@ -255,26 +356,28 @@
       position: relative;
     }
 
-    #overlay-modal.active .modal-content {
+    .modal-overlay.active .modal-content {
       transform: translateY(0);
     }
 
-    .modal-title {
-      font-size: 1.15rem;
-      margin-bottom: 0.75rem;
-      font-weight: 400;
-      letter-spacing: 0.02em;
-      color: #ffffff;
-    }
-
-    .modal-desc {
-      font-size: 0.85rem;
-      color: #b0b0b0;
-      line-height: 1.6;
+    .modal-body-text {
+      font-size: 0.88rem;
+      color: #c0c0c0;
+      line-height: 1.7;
       margin-bottom: 2.5rem;
+      text-align: left;
+      font-weight: 300;
     }
 
-    .close-btn {
+    .modal-body-text p {
+      margin-bottom: 1rem;
+    }
+
+    .modal-body-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .action-btn {
       background: transparent;
       color: #ffffff;
       border: none;
@@ -288,9 +391,9 @@
       padding: 0.5rem 1rem;
     }
 
-    .close-btn:hover {
+    .action-btn:hover {
       opacity: 1;
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
   </style>
 
@@ -326,13 +429,35 @@
     <div class="content-box">
       <span class="section-label">01 / Overview</span>
       <p class="editorial-lead">
-        OpenRecord is an independent legal practice advising creators and artists across India’s creative economy.
+        OpenRecord is a legal practice advising creators and artists across India’s creative economy.
       </p>
       <p class="editorial-sub">
-        Our work spans contracts, disputes and legal advisory, with a focus on the commercial and legal structures behind creative work.
+        We work across contracts, disputes and legal advisory, with a focus on the commercial and legal structures behind creative work.
       </p>
+      
+      <button class="toggle-btn clickable" id="about-toggle-btn">[ More about OpenRecord ]</button>
+
+      <div class="expandable-text" id="about-expandable">
+        <p>
+          Creative work is increasingly commercial, collaborative and public. A brand deal, a collaboration, a licence, a piece of content or a creative partnership can carry consequences long after the work itself is finished.
+        </p>
+        <p>
+          OpenRecord exists to bring considered legal advice into those relationships. We work with creators and artists to understand what they are agreeing to, protect what they have built and navigate situations when relationships or agreements break down.
+        </p>
+        <p>
+          The practice is built around a simple idea: good legal work should make creative work easier to pursue, not harder. That means clear advice, careful drafting and a practical understanding of how creative businesses actually operate.
+        </p>
+        <p>
+          OpenRecord is based in New Delhi and works with clients across the globe.
+        </p>
+      </div>
     </div>
   </section>
+
+  <!-- One-Liner Interstitial 1 -->
+  <div class="interstitial-section">
+    <h2 class="one-liner">The things we create deserve to last.</h2>
+  </div>
 
   <!-- Practice Section -->
   <section id="practices">
@@ -342,24 +467,29 @@
         <div class="practice-item">
           <h3 class="practice-title">Contracts</h3>
           <p class="practice-desc">
-            Review and drafting across brand, collaboration, licensing and commercial agreements.
+            The agreements behind creative work, from brand partnerships and collaborations to licensing and commercial arrangements.
           </p>
         </div>
         <div class="practice-item">
           <h3 class="practice-title">Disputes</h3>
           <p class="practice-desc">
-            Advice and representation in disputes arising from creative and commercial relationships.
+            When an agreement, relationship or piece of creative work becomes a source of conflict, we advise on the way forward.
           </p>
         </div>
         <div class="practice-item">
           <h3 class="practice-title">Advisory</h3>
           <p class="practice-desc">
-            Ongoing legal counsel on rights, ownership and the business of creative work.
+            Ongoing legal counsel on rights, ownership, commercial relationships and the business of creative work.
           </p>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- One-Liner Interstitial 2 -->
+  <div class="interstitial-section">
+    <h2 class="one-liner">Creation matters. So does the record behind it.</h2>
+  </div>
 
   <!-- Contact Section -->
   <section id="contact">
@@ -372,17 +502,39 @@
     </div>
   </section>
 
-  <!-- Focus Modal Overlay -->
-  <div id="overlay-modal">
+  <!-- Giant Brand Footer -->
+  <div id="brand-footer">
+    <div class="giant-logo-container">
+      <img src="OpenRecord logo.svg" alt="OpenRecord Giant Logo" />
+      <div class="giant-footer-meta">
+        <span>© 2026 OpenRecord. All rights reserved.</span>
+        <span>New Delhi, India.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Initial Disclaimer Modal Overlay -->
+  <div class="modal-overlay active" id="disclaimer-modal">
     <div class="modal-content">
-      <h2 class="modal-title" id="modal-title">Record Item</h2>
-      <p class="modal-desc" id="modal-desc">Detailed legal record or case metadata placeholder.</p>
-      <button class="close-btn clickable" id="close-btn">[ X ]</button>
+      <div class="modal-body-text">
+        <p>This website is intended for general information about OpenRecord and its areas of work. It does not constitute legal advice or create an advocate-client relationship.</p>
+        <p>OpenRecord does not solicit or advertise legal work through this website. By continuing, you acknowledge that you are accessing the website voluntarily and seeking information about the practice of your own accord.</p>
+      </div>
+      <button class="action-btn clickable" id="disclaimer-continue-btn">[ Continue ]</button>
+    </div>
+  </div>
+
+  <!-- Focus Modal Overlay for Sphere Cards -->
+  <div class="modal-overlay" id="overlay-modal">
+    <div class="modal-content">
+      <h2 style="font-size: 1.15rem; margin-bottom: 0.75rem; font-weight: 400; color: #ffffff;" id="modal-title">Record Item</h2>
+      <p style="font-size: 0.85rem; color: #b0b0b0; line-height: 1.6; margin-bottom: 2.5rem;" id="modal-desc">Detailed legal record or case metadata placeholder.</p>
+      <button class="action-btn clickable" id="close-btn">[ X ]</button>
     </div>
   </div>
 
   <script>
-    // Custom Cursor Handling
+    // Custom Cursor
     const cursor = document.getElementById('custom-cursor');
 
     window.addEventListener('mousemove', (e) => {
@@ -399,6 +551,21 @@
     document.addEventListener('mouseout', (e) => {
       if (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
         document.body.classList.remove('hovering');
+      }
+    });
+
+    // Expandable Text Handler
+    const toggleBtn = document.getElementById('about-toggle-btn');
+    const expandableText = document.getElementById('about-expandable');
+
+    toggleBtn.addEventListener('click', () => {
+      const isExpanded = expandableText.classList.contains('expanded');
+      if (isExpanded) {
+        expandableText.classList.remove('expanded');
+        toggleBtn.innerText = '[ More about OpenRecord ]';
+      } else {
+        expandableText.classList.add('expanded');
+        toggleBtn.innerText = '[ Less about OpenRecord ]';
       }
     });
 
@@ -542,6 +709,7 @@
       }
     }, { passive: false });
 
+    // Smooth Scrolling Links
     const logoBtn = document.getElementById('logo-btn');
     logoBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -551,6 +719,7 @@
 
     document.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', (e) => {
+        e.preventDefault();
         targetZoom = DEFAULT_ZOOM;
         const targetId = link.getAttribute('href');
         document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
@@ -568,8 +737,17 @@
       }
     });
 
+    // Disclaimer Overlay
+    const disclaimerModal = document.getElementById('disclaimer-modal');
+    const disclaimerContinueBtn = document.getElementById('disclaimer-continue-btn');
+
+    disclaimerContinueBtn.addEventListener('click', () => {
+      disclaimerModal.classList.remove('active');
+    });
+
+    // Card Focus Modal Overlay
     const modal = document.getElementById('overlay-modal');
-    const modalContent = document.querySelector('.modal-content');
+    const modalContent = modal.querySelector('.modal-content');
     const modalTitle = document.getElementById('modal-title');
     const modalDesc = document.getElementById('modal-desc');
     const closeBtn = document.getElementById('close-btn');
