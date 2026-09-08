@@ -45,7 +45,7 @@
       transform: translate(-50%, -50%) scale(2.5);
     }
 
-    /* Fixed Top Left Header Logo (Prominent & High) */
+    /* Fixed Header Logo */
     .header-fixed {
       position: fixed;
       top: 1.2rem;
@@ -61,26 +61,30 @@
     }
 
     .header-fixed img {
-      height: 110px; /* Significantly enlarged */
+      height: 110px;
       width: auto;
       display: block;
-      filter: brightness(0) invert(1); /* Forces SVG rendering to pure #ffffff */
+      filter: brightness(0) invert(1);
       opacity: 0.95;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: opacity 0.2s ease;
     }
 
     .header-fixed img:hover {
       opacity: 1;
     }
 
-    /* Fixed Navigation (Bottom Centered) */
+    /* Navigation (Bottom Centered) */
     .nav-fixed {
       position: fixed;
       bottom: 2.5rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
-      background: transparent;
+      background: rgba(40, 40, 40, 0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.75rem 1.5rem;
+      border-radius: 40px;
       display: flex;
       gap: 2rem;
       pointer-events: auto;
@@ -90,7 +94,7 @@
       color: #ffffff;
       text-decoration: none;
       font-size: 0.75rem;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       opacity: 0.75;
       transition: opacity 0.2s ease;
@@ -110,10 +114,10 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 6rem 2rem;
+      padding: 8rem 2rem;
     }
 
-    /* Hero Canvas Section */
+    /* Hero Viewport */
     #hero {
       padding: 0;
       overflow: hidden;
@@ -134,7 +138,7 @@
       filter: blur(16px) brightness(0.6);
     }
 
-    /* Editorial Content Sections */
+    /* Typography & Editorial Content Styling */
     .content-box {
       max-width: 720px;
       width: 100%;
@@ -144,27 +148,75 @@
 
     .section-label {
       font-size: 0.7rem;
-      letter-spacing: 0.25em;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: #a0a0a0;
-      margin-bottom: 2rem;
+      color: #b0b0b0;
+      margin-bottom: 2.5rem;
       display: block;
+      font-weight: 600;
     }
 
-    .section-title {
+    .editorial-lead {
       font-size: 1.8rem;
-      font-weight: 400;
-      line-height: 1.4;
+      font-weight: 300;
+      line-height: 1.5;
       letter-spacing: -0.01em;
       margin-bottom: 2rem;
       color: #ffffff;
     }
 
-    .section-body {
-      font-size: 0.95rem;
-      line-height: 1.8;
+    .editorial-sub {
+      font-size: 1.1rem;
+      line-height: 1.7;
       color: #d0d0d0;
       font-weight: 300;
+    }
+
+    /* Practice Area Grid Layout */
+    .practice-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      margin-top: 1rem;
+    }
+
+    .practice-item {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 1.5rem;
+    }
+
+    .practice-title {
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .practice-desc {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #c0c0c0;
+      font-weight: 300;
+    }
+
+    /* Contact Block */
+    .contact-link {
+      display: inline-block;
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      color: #ffffff;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      padding-bottom: 0.2rem;
+      transition: border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .contact-link:hover {
+      opacity: 0.8;
+      border-color: #ffffff;
     }
 
     /* Focus Modal Overlay */
@@ -264,7 +316,7 @@
     <a href="#contact" class="clickable nav-link">[ CONTACT ]</a>
   </nav>
 
-  <!-- Hero 3D Canvas Viewport -->
+  <!-- Hero Viewport -->
   <section id="hero">
     <div id="canvas-container"></div>
   </section>
@@ -273,23 +325,39 @@
   <section id="about">
     <div class="content-box">
       <span class="section-label">01 / Overview</span>
-      <h2 class="section-title">An independent advisory tailored for modern creative practices, intellectual property, and strategic counsel.</h2>
-      <p class="section-body">
-        Providing direct legal counsel across entertainment, digital assets, and high-stakes dispute strategy with an emphasis on clarity and minimalist execution.
+      <p class="editorial-lead">
+        OpenRecord is an independent legal practice advising creators and artists across India’s creative economy.
+      </p>
+      <p class="editorial-sub">
+        Our work spans contracts, disputes and legal advisory, with a focus on the commercial and legal structures behind creative work.
       </p>
     </div>
   </section>
 
-  <!-- Practices Section -->
+  <!-- Practice Section -->
   <section id="practices">
     <div class="content-box">
-      <span class="section-label">02 / Focus Areas</span>
-      <h2 class="section-title">Specialized advisory services engineered for contemporary litigation and creative industries.</h2>
-      <p class="section-body">
-        • Intellectual Property & Copyright Strategy<br>
-        • Commercial Contracts & Rights Management<br>
-        • Litigation Advisory & Dispute Resolution
-      </p>
+      <span class="section-label">02 / Practice Areas</span>
+      <div class="practice-grid">
+        <div class="practice-item">
+          <h3 class="practice-title">Contracts</h3>
+          <p class="practice-desc">
+            Review and drafting across brand, collaboration, licensing and commercial agreements.
+          </p>
+        </div>
+        <div class="practice-item">
+          <h3 class="practice-title">Disputes</h3>
+          <p class="practice-desc">
+            Advice and representation in disputes arising from creative and commercial relationships.
+          </p>
+        </div>
+        <div class="practice-item">
+          <h3 class="practice-title">Advisory</h3>
+          <p class="practice-desc">
+            Ongoing legal counsel on rights, ownership and the business of creative work.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -297,11 +365,10 @@
   <section id="contact">
     <div class="content-box">
       <span class="section-label">03 / Communication</span>
-      <h2 class="section-title">Direct Inquiries</h2>
-      <p class="section-body">
-        For retainer arrangements, advice, or counsel, get in touch via email:<br><br>
-        <a href="mailto:office@openrecord.law" class="clickable" style="color: #ffffff; text-decoration: underline;">office@openrecord.law</a>
+      <p class="editorial-lead">
+        For legal enquiries, advisory and engagements, get in touch.
       </p>
+      <a href="mailto:office@openrecord.law" class="contact-link clickable">office@openrecord.law</a>
     </div>
   </section>
 
@@ -315,7 +382,7 @@
   </div>
 
   <script>
-    // --- Custom Cursor Handling ---
+    // Custom Cursor Handling
     const cursor = document.getElementById('custom-cursor');
 
     window.addEventListener('mousemove', (e) => {
@@ -335,17 +402,16 @@
       }
     });
 
-    // --- Configuration ---
+    // Sphere Configuration
     const TOTAL_CARDS = 38;
     const SPHERE_RADIUS = 18;
     const CARD_WIDTH = 3.5;
     const CARD_HEIGHT = 4.5;
     
-    // Zoom Boundary Constants
     const DEFAULT_ZOOM = 42;
-    const MAX_ENLARGED_ZOOM = 26; // Enlarged state (closer to camera)
+    const MAX_ENLARGED_ZOOM = 26;
 
-    // --- Scene Setup ---
+    // Three.js Scene Setup
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     
@@ -360,7 +426,6 @@
     const sphereGroup = new THREE.Group();
     scene.add(sphereGroup);
 
-    // Card Canvas Texture Generator
     function createCardTexture(index) {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
@@ -386,7 +451,6 @@
     const cards = [];
     const geometry = new THREE.PlaneGeometry(CARD_WIDTH, CARD_HEIGHT);
 
-    // Uniform Sphere Distribution
     const phi = (1 + Math.sqrt(5)) / 2;
     for (let i = 0; i < TOTAL_CARDS; i++) {
       const theta = 2 * Math.PI * i / phi;
@@ -420,10 +484,8 @@
       cards.push(mesh);
     }
 
-    // --- Acceleration Parameters ---
     let isDragging = false;
     let previousMousePosition = { x: 0, y: 0 };
-    // Faster default rotation speed
     let rotationVelocity = { x: 0.002, y: 0.0035 };
     let targetZoom = DEFAULT_ZOOM;
     let isFocused = false;
@@ -431,7 +493,6 @@
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    // Mouse Interaction
     window.addEventListener('mousedown', (e) => {
       if (isFocused || window.scrollY > 50) return;
       isDragging = true;
@@ -458,26 +519,20 @@
 
     window.addEventListener('mouseup', () => { isDragging = false; });
 
-    // --- Custom Scroll Physics for Sphere State ---
-    let isScrollLocked = false;
-
     window.addEventListener('wheel', (e) => {
       if (isFocused) return;
 
       const isAtTop = window.scrollY <= 10;
 
       if (isAtTop) {
-        // Scrolling DOWN while at the top view
         if (e.deltaY > 0) {
           if (targetZoom < DEFAULT_ZOOM - 1) {
-            // Revert back to default size first
             e.preventDefault();
             targetZoom = DEFAULT_ZOOM;
             document.body.style.overflow = 'hidden';
             setTimeout(() => { document.body.style.overflow = 'auto'; }, 400);
           }
         } 
-        // Scrolling UP while at top view -> Enlarge sphere
         else if (e.deltaY < 0) {
           if (targetZoom > MAX_ENLARGED_ZOOM + 1) {
             e.preventDefault();
@@ -487,7 +542,6 @@
       }
     }, { passive: false });
 
-    // Handle smooth transition back to top via Navigation / Logo
     const logoBtn = document.getElementById('logo-btn');
     logoBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -503,7 +557,6 @@
       });
     });
 
-    // Click Detection on Sphere Cards
     window.addEventListener('click', (e) => {
       if (isFocused || window.scrollY > 50) return;
 
@@ -515,7 +568,6 @@
       }
     });
 
-    // --- Modal Overlay Handling ---
     const modal = document.getElementById('overlay-modal');
     const modalContent = document.querySelector('.modal-content');
     const modalTitle = document.getElementById('modal-title');
@@ -548,11 +600,9 @@
       }
     });
 
-    // Render Loop
     function animate() {
       requestAnimationFrame(animate);
 
-      // Interpolate camera zoom for smooth transitions
       camera.position.z += (targetZoom - camera.position.z) * 0.08;
 
       if (!isDragging && !isFocused) {
@@ -562,7 +612,6 @@
         rotationVelocity.x *= 0.98;
         rotationVelocity.y *= 0.98;
 
-        // Maintain baseline spin speed
         if (Math.abs(rotationVelocity.x) < 0.001) rotationVelocity.x = 0.0008;
         if (Math.abs(rotationVelocity.y) < 0.0015) rotationVelocity.y = 0.0015;
       }
@@ -572,7 +621,6 @@
 
     animate();
 
-    // Window Resize Handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
