@@ -3,29 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Image Sphere</title>
+  <title>OpenRecord</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    body, html {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+
+    html {
+      scroll-behavior: smooth;
       background-color: #0d0d0d;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* WebGL Canvas */
+    body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* Fixed Minimal Header (Top Right Logo) */
+    .header-fixed {
+      position: fixed;
+      top: 2rem;
+      right: 2.5rem;
+      z-index: 100;
+      background: transparent;
+      pointer-events: auto;
+    }
+
+    .header-fixed img {
+      height: 28px;
+      width: auto;
+      display: block;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+
+    .header-fixed img:hover {
+      opacity: 1;
+    }
+
+    /* Fixed Transparent Navigation (Bottom Centered) */
+    .nav-fixed {
+      position: fixed;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: transparent;
+      display: flex;
+      gap: 2rem;
+      pointer-events: auto;
+    }
+
+    .nav-fixed a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+      font-weight: 500;
+    }
+
+    .nav-fixed a:hover {
+      opacity: 1;
+    }
+
+    /* Full Viewport Section Layout */
+    section {
+      width: 100vw;
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 6rem 2rem;
+    }
+
+    /* Hero Canvas Section */
+    #hero {
+      padding: 0;
+      overflow: hidden;
+    }
+
     #canvas-container {
+      width: 100%;
+      height: 100vh;
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
       z-index: 1;
       transition: filter 0.5s ease;
     }
@@ -34,49 +106,46 @@
       filter: blur(12px) brightness(0.4);
     }
 
-    /* Overlay UI */
-    .ui-layer {
-      position: absolute;
-      top: 0;
-      left: 0;
+    /* Editorial Content Sections */
+    .content-box {
+      max-width: 720px;
       width: 100%;
-      height: 100%;
-      z-index: 2;
-      pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 2rem;
+      text-align: left;
     }
 
-    .header, .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .brand {
-      font-size: 0.9rem;
-      letter-spacing: 0.15em;
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
-      font-weight: 600;
+      color: #666666;
+      margin-bottom: 2rem;
+      display: block;
     }
 
-    .hint {
-      font-size: 0.8rem;
-      opacity: 0.5;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+      color: #f0f0f0;
     }
 
-    /* Focus Modal Overlay */
+    .section-body {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: #a0a0a0;
+      font-weight: 300;
+    }
+
+    /* Minimal Focus Modal Overlay */
     #overlay-modal {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 3;
+      width: 100vw;
+      height: 100vh;
+      z-index: 200;
       pointer-events: none;
       opacity: 0;
       display: flex;
@@ -91,14 +160,14 @@
     }
 
     .modal-content {
-      text-align: center;
-      max-width: 400px;
-      padding: 2rem;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      transform: translateY(20px);
+      text-align: left;
+      max-width: 440px;
+      width: 85%;
+      padding: 2.5rem;
+      background: rgba(18, 18, 18, 0.75);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transform: translateY(15px);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -107,65 +176,109 @@
     }
 
     .modal-title {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
     }
 
     .modal-desc {
       font-size: 0.85rem;
-      color: #a0a0a0;
-      line-height: 1.5;
-      margin-bottom: 1.5rem;
+      color: #888888;
+      line-height: 1.6;
+      margin-bottom: 2rem;
     }
 
     .close-btn {
-      background: #ffffff;
-      color: #000000;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      font-size: 0.8rem;
-      font-weight: 600;
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-radius: 4px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s ease;
     }
 
     .close-btn:hover {
-      background: #cccccc;
+      background: #ffffff;
+      color: #000000;
     }
   </style>
 
-  <!-- Three.js Library -->
+  <!-- Three.js Engine -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-  <div id="canvas-container"></div>
-
-  <div class="ui-layer">
-    <div class="header">
-      <div class="brand">Sphere Canvas</div>
-      <div class="hint">Drag to rotate / Click card to focus</div>
-    </div>
-    <div class="footer">
-      <div class="hint">Scroll to zoom</div>
-    </div>
+  <!-- Top Right Logo Button (Home / Scroll Top) -->
+  <div class="header-fixed">
+    <a href="#hero">
+      <img src="OpenRecord logo.svg" alt="OpenRecord Logo" />
+    </a>
   </div>
 
+  <!-- Bottom Navigation -->
+  <nav class="nav-fixed">
+    <a href="#about">[ ABOUT ]</a>
+    <a href="#practices">[ PRACTICES ]</a>
+    <a href="#contact">[ CONTACT ]</a>
+  </nav>
+
+  <!-- Hero 3D Canvas Viewport -->
+  <section id="hero">
+    <div id="canvas-container"></div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="content-box">
+      <span class="section-label">01 / Overview</span>
+      <h2 class="section-title">An independent advisory tailored for modern creative practices, intellectual property, and strategic counsel.</h2>
+      <p class="section-body">
+        Providing direct legal counsel across entertainment, digital assets, and high-stakes dispute strategy with an emphasis on clarity and minimalist execution.
+      </p>
+    </div>
+  </section>
+
+  <!-- Practices Section -->
+  <section id="practices">
+    <div class="content-box">
+      <span class="section-label">02 / Focus Areas</span>
+      <h2 class="section-title">Specialized advisory services engineered for contemporary litigation and creative industries.</h2>
+      <p class="section-body">
+        • Intellectual Property & Copyright Strategy<br>
+        • Commercial Contracts & Rights Management<br>
+        • Litigation Advisory & Dispute Resolution
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="content-box">
+      <span class="section-label">03 / Communication</span>
+      <h2 class="section-title">Direct Inquiries</h2>
+      <p class="section-body">
+        For retainer arrangements, advice, or counsel, get in touch via email:<br><br>
+        <a href="mailto:office@openrecord.law" style="color: #ffffff; text-decoration: underline;">office@openrecord.law</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Interaction Modal -->
   <div id="overlay-modal">
     <div class="modal-content">
-      <h2 class="modal-title" id="modal-title">Item Title</h2>
-      <p class="modal-desc" id="modal-desc">Detailed metadata or image description can go here.</p>
-      <button class="close-btn" id="close-btn">Return to Sphere</button>
+      <h2 class="modal-title" id="modal-title">Record Item</h2>
+      <p class="modal-desc" id="modal-desc">Detailed legal record or case metadata placeholder.</p>
+      <button class="close-btn" id="close-btn">Close</button>
     </div>
   </div>
 
   <script>
     // --- Configuration ---
-    const TOTAL_CARDS = 42;
+    const TOTAL_CARDS = 38;
     const SPHERE_RADIUS = 18;
     const CARD_WIDTH = 3.5;
     const CARD_HEIGHT = 4.5;
@@ -185,25 +298,28 @@
     const sphereGroup = new THREE.Group();
     scene.add(sphereGroup);
 
-    // --- Generate Sample Textures Canvas ---
-    function createPlaceholderTexture(text, bgColor, textColor) {
+    // Dynamic Canvas Texture Generator
+    function createCardTexture(index) {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
       canvas.height = 640;
       const ctx = canvas.getContext('2d');
 
-      ctx.fillStyle = bgColor;
+      // Dark, minimal monochromatic card background
+      ctx.fillStyle = '#141414';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = textColor;
-      ctx.font = 'bold 32px sans-serif';
+      // Subtle border
+      ctx.strokeStyle = '#2a2a2a';
+      ctx.lineWidth = 12;
+      ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+      // Minimal Index Label
+      ctx.fillStyle = '#888888';
+      ctx.font = '24px monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
-
-      ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-      ctx.lineWidth = 16;
-      ctx.strokeRect(0, 0, canvas.width, canvas.height);
+      ctx.fillText(`[ RECORD ${String(index).padStart(2, '0')} ]`, canvas.width / 2, canvas.height / 2);
 
       return new THREE.CanvasTexture(canvas);
     }
@@ -211,7 +327,7 @@
     const cards = [];
     const geometry = new THREE.PlaneGeometry(CARD_WIDTH, CARD_HEIGHT);
 
-    // Distribute cards uniformly on sphere using Fibonacci Lattice
+    // Uniform Sphere Distribution
     const phi = (1 + Math.sqrt(5)) / 2;
     for (let i = 0; i < TOTAL_CARDS; i++) {
       const theta = 2 * Math.PI * i / phi;
@@ -222,48 +338,40 @@
       const z = Math.sin(theta) * radiusAtY;
 
       const pos = new THREE.Vector3(x, y, z).multiplyScalar(SPHERE_RADIUS);
-
-      const colorHue = (i * 25) % 360;
-      const texture = createPlaceholderTexture(`Card #${i + 1}`, `hsl(${colorHue}, 40%, 20%)`, `hsl(${colorHue}, 80%, 80%)`);
+      const texture = createCardTexture(i + 1);
       
       const material = new THREE.MeshBasicMaterial({
         map: texture,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.9
+        opacity: 0.85
       });
 
       const mesh = new THREE.Mesh(geometry, material);
       mesh.position.copy(pos);
-      
-      // Orient card facing outward from center
       mesh.lookAt(pos.clone().multiplyScalar(2));
 
       mesh.userData = {
         id: i + 1,
-        title: `Project Item #${i + 1}`,
-        desc: `Description for element ${i + 1} positioned in the 3D matrix.`,
-        basePosition: pos.clone(),
-        baseRotation: mesh.rotation.clone()
+        title: `Record Item #${String(i + 1).padStart(2, '0')}`,
+        desc: `Specific legal archive metadata, agreement reference, or case detail placeholder for card index ${i + 1}.`
       };
 
       sphereGroup.add(mesh);
       cards.push(mesh);
     }
 
-    // --- Interaction Mechanics ---
+    // --- Interactive Sphere Physics ---
     let isDragging = false;
     let previousMousePosition = { x: 0, y: 0 };
-    let rotationVelocity = { x: 0.001, y: 0.002 };
+    let rotationVelocity = { x: 0.0008, y: 0.0012 };
     let isFocused = false;
-    let selectedMesh = null;
 
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    // Mouse & Touch Controls
     window.addEventListener('mousedown', (e) => {
-      if (isFocused) return;
+      if (isFocused || window.scrollY > 100) return;
       isDragging = true;
       previousMousePosition = { x: e.clientX, y: e.clientY };
     });
@@ -272,13 +380,13 @@
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-      if (!isDragging || isFocused) return;
+      if (!isDragging || isFocused || window.scrollY > 100) return;
 
       const deltaX = e.clientX - previousMousePosition.x;
       const deltaY = e.clientY - previousMousePosition.y;
 
-      rotationVelocity.y = deltaX * 0.0005;
-      rotationVelocity.x = deltaY * 0.0005;
+      rotationVelocity.y = deltaX * 0.0004;
+      rotationVelocity.x = deltaY * 0.0004;
 
       sphereGroup.rotation.y += rotationVelocity.y;
       sphereGroup.rotation.x += rotationVelocity.x;
@@ -288,16 +396,9 @@
 
     window.addEventListener('mouseup', () => { isDragging = false; });
 
-    // Zoom on Scroll
-    window.addEventListener('wheel', (e) => {
-      if (isFocused) return;
-      camera.position.z += e.deltaY * 0.02;
-      camera.position.z = Math.max(25, Math.min(70, camera.position.z));
-    });
-
-    // Click Detection / Selection
+    // Click Detection
     window.addEventListener('click', (e) => {
-      if (isFocused) return;
+      if (isFocused || window.scrollY > 100) return;
 
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(cards);
@@ -307,7 +408,7 @@
       }
     });
 
-    // --- Focus & Overlay Handlers ---
+    // Focus & Overlay Logic
     const modal = document.getElementById('overlay-modal');
     const modalTitle = document.getElementById('modal-title');
     const modalDesc = document.getElementById('modal-desc');
@@ -315,8 +416,6 @@
 
     function focusCard(mesh) {
       isFocused = true;
-      selectedMesh = mesh;
-
       modalTitle.innerText = mesh.userData.title;
       modalDesc.innerText = mesh.userData.desc;
 
@@ -326,30 +425,25 @@
 
     function resetFocus() {
       isFocused = false;
-      selectedMesh = null;
-
       container.classList.remove('blurred');
       modal.classList.remove('active');
     }
 
     closeBtn.addEventListener('click', resetFocus);
 
-    // --- Render Loop ---
+    // Render Loop
     function animate() {
       requestAnimationFrame(animate);
 
-      // Continuous rotation momentum when not dragging/focused
       if (!isDragging && !isFocused) {
         sphereGroup.rotation.y += rotationVelocity.y;
         sphereGroup.rotation.x += rotationVelocity.x;
 
-        // Friction inertia
-        rotationVelocity.x *= 0.95;
-        rotationVelocity.y *= 0.95;
+        rotationVelocity.x *= 0.96;
+        rotationVelocity.y *= 0.96;
 
-        // Maintain minimum ambient drift
-        if (Math.abs(rotationVelocity.x) < 0.0005) rotationVelocity.x = 0.0003;
-        if (Math.abs(rotationVelocity.y) < 0.0005) rotationVelocity.y = 0.0005;
+        if (Math.abs(rotationVelocity.x) < 0.0003) rotationVelocity.x = 0.0002;
+        if (Math.abs(rotationVelocity.y) < 0.0003) rotationVelocity.y = 0.0004;
       }
 
       renderer.render(scene, camera);
@@ -357,7 +451,7 @@
 
     animate();
 
-    // Responsive Resizing
+    // Window Resize
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -366,4 +460,3 @@
   </script>
 </body>
 </html>
-
