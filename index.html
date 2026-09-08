@@ -9,14 +9,14 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      cursor: none; /* Custom cursor used across the entire site */
+      cursor: none;
     }
 
     html {
-      scroll-behavior: smooth;
       background-color: #505050;
       color: #ffffff;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
     }
 
     body {
@@ -45,11 +45,11 @@
       transform: translate(-50%, -50%) scale(2.5);
     }
 
-    /* Fixed Top Left Header Logo */
+    /* Fixed Top Left Header Logo (Prominent & High) */
     .header-fixed {
       position: fixed;
-      top: 2rem;
-      left: 2.5rem;
+      top: 1.2rem;
+      left: 1.8rem;
       z-index: 100;
       background: transparent;
       pointer-events: auto;
@@ -61,19 +61,19 @@
     }
 
     .header-fixed img {
-      height: 64px; /* Significantly larger */
+      height: 110px; /* Significantly enlarged */
       width: auto;
       display: block;
-      filter: brightness(0) invert(1); /* Forces SVG to render completely #ffffff white */
+      filter: brightness(0) invert(1); /* Forces SVG rendering to pure #ffffff */
       opacity: 0.95;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .header-fixed img:hover {
       opacity: 1;
     }
 
-    /* Fixed Transparent Navigation (Bottom Centered) */
+    /* Fixed Navigation (Bottom Centered) */
     .nav-fixed {
       position: fixed;
       bottom: 2.5rem;
@@ -92,7 +92,7 @@
       font-size: 0.75rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      opacity: 0.7;
+      opacity: 0.75;
       transition: opacity 0.2s ease;
       font-weight: 500;
     }
@@ -117,12 +117,13 @@
     #hero {
       padding: 0;
       overflow: hidden;
+      height: 100vh;
     }
 
     #canvas-container {
       width: 100%;
       height: 100vh;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       z-index: 1;
@@ -133,11 +134,12 @@
       filter: blur(16px) brightness(0.6);
     }
 
-    /* Content Layout */
+    /* Editorial Content Sections */
     .content-box {
       max-width: 720px;
       width: 100%;
       text-align: left;
+      z-index: 10;
     }
 
     .section-label {
@@ -172,13 +174,13 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 500; /* Elevated above WebGL canvas interactions */
+      z-index: 500;
       pointer-events: none;
       opacity: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(8px);
       transition: opacity 0.4s ease;
     }
@@ -193,7 +195,7 @@
       max-width: 440px;
       width: 85%;
       padding: 3rem 2.5rem 2.5rem 2.5rem;
-      background: rgba(30, 30, 30, 0.85);
+      background: rgba(30, 30, 30, 0.88);
       backdrop-filter: blur(24px);
       border: 1px solid rgba(255, 255, 255, 0.12);
       transform: translateY(15px);
@@ -228,7 +230,7 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       font-weight: 600;
-      opacity: 0.7;
+      opacity: 0.75;
       transition: opacity 0.2s ease, transform 0.2s ease;
       display: inline-block;
       padding: 0.5rem 1rem;
@@ -250,16 +252,16 @@
 
   <!-- Top Left Logo Button -->
   <div class="header-fixed">
-    <a href="#hero" class="clickable">
+    <a href="#hero" id="logo-btn" class="clickable">
       <img src="OpenRecord logo.svg" alt="OpenRecord Logo" />
     </a>
   </div>
 
   <!-- Bottom Navigation -->
   <nav class="nav-fixed">
-    <a href="#about" class="clickable">[ ABOUT ]</a>
-    <a href="#practices" class="clickable">[ PRACTICES ]</a>
-    <a href="#contact" class="clickable">[ CONTACT ]</a>
+    <a href="#about" class="clickable nav-link">[ ABOUT ]</a>
+    <a href="#practices" class="clickable nav-link">[ PRACTICES ]</a>
+    <a href="#contact" class="clickable nav-link">[ CONTACT ]</a>
   </nav>
 
   <!-- Hero 3D Canvas Viewport -->
@@ -339,16 +341,16 @@
     const CARD_WIDTH = 3.5;
     const CARD_HEIGHT = 4.5;
     
-    // Zoom boundary limits
-    const MIN_ZOOM = 22;
-    const MAX_ZOOM = 65;
+    // Zoom Boundary Constants
+    const DEFAULT_ZOOM = 42;
+    const MAX_ENLARGED_ZOOM = 26; // Enlarged state (closer to camera)
 
     // --- Scene Setup ---
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 42;
+    camera.position.z = DEFAULT_ZOOM;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -358,7 +360,7 @@
     const sphereGroup = new THREE.Group();
     scene.add(sphereGroup);
 
-    // Dynamic Canvas Texture Generator
+    // Card Canvas Texture Generator
     function createCardTexture(index) {
       const canvas = document.createElement('canvas');
       canvas.width = 512;
@@ -418,17 +420,20 @@
       cards.push(mesh);
     }
 
-    // --- Interaction Mechanics ---
+    // --- Acceleration Parameters ---
     let isDragging = false;
     let previousMousePosition = { x: 0, y: 0 };
-    let rotationVelocity = { x: 0.0008, y: 0.0012 };
+    // Faster default rotation speed
+    let rotationVelocity = { x: 0.002, y: 0.0035 };
+    let targetZoom = DEFAULT_ZOOM;
     let isFocused = false;
 
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
+    // Mouse Interaction
     window.addEventListener('mousedown', (e) => {
-      if (isFocused || window.scrollY > 100) return;
+      if (isFocused || window.scrollY > 50) return;
       isDragging = true;
       previousMousePosition = { x: e.clientX, y: e.clientY };
     });
@@ -437,13 +442,13 @@
       mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-      if (!isDragging || isFocused || window.scrollY > 100) return;
+      if (!isDragging || isFocused || window.scrollY > 50) return;
 
       const deltaX = e.clientX - previousMousePosition.x;
       const deltaY = e.clientY - previousMousePosition.y;
 
-      rotationVelocity.y = deltaX * 0.0004;
-      rotationVelocity.x = deltaY * 0.0004;
+      rotationVelocity.y = deltaX * 0.0008;
+      rotationVelocity.x = deltaY * 0.0008;
 
       sphereGroup.rotation.y += rotationVelocity.y;
       sphereGroup.rotation.x += rotationVelocity.x;
@@ -453,17 +458,54 @@
 
     window.addEventListener('mouseup', () => { isDragging = false; });
 
-    // Scroll Zooming with Minimum / Maximum Expansion Limits
-    window.addEventListener('wheel', (e) => {
-      if (isFocused || window.scrollY > 100) return;
-      
-      camera.position.z += e.deltaY * 0.025;
-      camera.position.z = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, camera.position.z));
-    }, { passive: true });
+    // --- Custom Scroll Physics for Sphere State ---
+    let isScrollLocked = false;
 
-    // Click Selection
+    window.addEventListener('wheel', (e) => {
+      if (isFocused) return;
+
+      const isAtTop = window.scrollY <= 10;
+
+      if (isAtTop) {
+        // Scrolling DOWN while at the top view
+        if (e.deltaY > 0) {
+          if (targetZoom < DEFAULT_ZOOM - 1) {
+            // Revert back to default size first
+            e.preventDefault();
+            targetZoom = DEFAULT_ZOOM;
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => { document.body.style.overflow = 'auto'; }, 400);
+          }
+        } 
+        // Scrolling UP while at top view -> Enlarge sphere
+        else if (e.deltaY < 0) {
+          if (targetZoom > MAX_ENLARGED_ZOOM + 1) {
+            e.preventDefault();
+            targetZoom = MAX_ENLARGED_ZOOM;
+          }
+        }
+      }
+    }, { passive: false });
+
+    // Handle smooth transition back to top via Navigation / Logo
+    const logoBtn = document.getElementById('logo-btn');
+    logoBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      targetZoom = DEFAULT_ZOOM;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        targetZoom = DEFAULT_ZOOM;
+        const targetId = link.getAttribute('href');
+        document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Click Detection on Sphere Cards
     window.addEventListener('click', (e) => {
-      if (isFocused || window.scrollY > 100) return;
+      if (isFocused || window.scrollY > 50) return;
 
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(cards);
@@ -473,7 +515,7 @@
       }
     });
 
-    // --- Modal Overlay Controls ---
+    // --- Modal Overlay Handling ---
     const modal = document.getElementById('overlay-modal');
     const modalContent = document.querySelector('.modal-content');
     const modalTitle = document.getElementById('modal-title');
@@ -500,7 +542,6 @@
       resetFocus();
     });
 
-    // Close Modal on clicking outside the content card
     modal.addEventListener('click', (e) => {
       if (!modalContent.contains(e.target)) {
         resetFocus();
@@ -511,15 +552,19 @@
     function animate() {
       requestAnimationFrame(animate);
 
+      // Interpolate camera zoom for smooth transitions
+      camera.position.z += (targetZoom - camera.position.z) * 0.08;
+
       if (!isDragging && !isFocused) {
         sphereGroup.rotation.y += rotationVelocity.y;
         sphereGroup.rotation.x += rotationVelocity.x;
 
-        rotationVelocity.x *= 0.96;
-        rotationVelocity.y *= 0.96;
+        rotationVelocity.x *= 0.98;
+        rotationVelocity.y *= 0.98;
 
-        if (Math.abs(rotationVelocity.x) < 0.0003) rotationVelocity.x = 0.0002;
-        if (Math.abs(rotationVelocity.y) < 0.0003) rotationVelocity.y = 0.0004;
+        // Maintain baseline spin speed
+        if (Math.abs(rotationVelocity.x) < 0.001) rotationVelocity.x = 0.0008;
+        if (Math.abs(rotationVelocity.y) < 0.0015) rotationVelocity.y = 0.0015;
       }
 
       renderer.render(scene, camera);
@@ -527,7 +572,7 @@
 
     animate();
 
-    // Window Resize
+    // Window Resize Handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
