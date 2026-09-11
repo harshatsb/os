@@ -89,6 +89,7 @@
       opacity: 0.75;
       transition: opacity 0.2s ease;
       font-weight: 500;
+      white-space: nowrap;
     }
 
     .nav-fixed a:hover {
@@ -149,7 +150,7 @@
     }
 
     .editorial-lead {
-      font-size: 1.8rem;
+      font-size: clamp(1.35rem, 3.5vw, 1.8rem);
       font-weight: 300;
       line-height: 1.5;
       letter-spacing: -0.01em;
@@ -163,7 +164,7 @@
     }
 
     .editorial-sub {
-      font-size: 1.1rem;
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
       line-height: 1.7;
       color: #d0d0d0;
       font-weight: 300;
@@ -221,7 +222,7 @@
     }
 
     .one-liner-normal {
-      font-size: 2.8rem;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.3;
@@ -243,7 +244,7 @@
       height: 100vh;
       width: 100%;
       overflow: hidden;
-      background: transparent; /* Allows sphere background to show through */
+      background: transparent;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -288,7 +289,7 @@
     }
 
     .giant-practice-title {
-      font-size: 4.5rem;
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -298,7 +299,7 @@
     }
 
     .giant-practice-desc {
-      font-size: 1.25rem;
+      font-size: clamp(1rem, 3vw, 1.25rem);
       line-height: 1.8;
       color: #d0d0d0;
       font-weight: 300;
@@ -311,13 +312,14 @@
     .contact-link {
       display: inline-block;
       margin-top: 2rem;
-      font-size: 1.5rem;
+      font-size: clamp(1.15rem, 4vw, 1.5rem);
       color: #ffffff;
       text-decoration: none;
       letter-spacing: 0.02em;
       border-bottom: 1px solid rgba(255, 255, 255, 0.4);
       padding-bottom: 0.2rem;
       transition: border-color 0.2s ease, opacity 0.2s ease;
+      word-break: break-all;
     }
 
     .contact-link:hover {
@@ -387,6 +389,7 @@
       background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(12px);
       transition: opacity 0.4s ease;
+      padding: 1.5rem;
     }
 
     .modal-overlay.active {
@@ -397,7 +400,9 @@
     .modal-content {
       text-align: center;
       max-width: 500px;
-      width: 85%;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
       padding: 3.5rem 2.5rem 2.5rem 2.5rem;
       background: rgba(30, 30, 30, 0.92);
       backdrop-filter: blur(24px);
@@ -445,6 +450,60 @@
     .action-btn:hover {
       opacity: 1;
       transform: scale(1.05);
+    }
+
+    /* Mobile Responsive Optimizations */
+    @media (max-width: 768px) {
+      * {
+        cursor: auto !important;
+      }
+
+      #custom-cursor {
+        display: none !important;
+      }
+
+      .header-fixed {
+        top: 1rem;
+        left: 1.25rem;
+      }
+
+      .header-fixed img {
+        height: 80px;
+      }
+
+      .nav-fixed {
+        bottom: 1.5rem;
+        gap: 1.25rem;
+        width: 90%;
+        justify-content: center;
+      }
+
+      .nav-fixed a {
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+      }
+
+      section {
+        padding: 6rem 1.5rem;
+      }
+
+      .practices-header-fixed {
+        top: 10vh;
+      }
+
+      .practice-slide {
+        padding: 0 1.5rem;
+      }
+
+      .giant-footer-meta {
+        flex-direction: column;
+        gap: 0.75rem;
+        text-align: center;
+      }
+
+      .modal-content {
+        padding: 2.5rem 1.5rem 2rem 1.5rem;
+      }
     }
   </style>
 
@@ -597,18 +656,20 @@
     const cursor = document.getElementById('custom-cursor');
 
     window.addEventListener('mousemove', (e) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
+      if (window.innerWidth > 768) {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+      }
     });
 
     document.addEventListener('mouseover', (e) => {
-      if (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+      if (window.innerWidth > 768 && (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON')) {
         document.body.classList.add('hovering');
       }
     });
 
     document.addEventListener('mouseout', (e) => {
-      if (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+      if (window.innerWidth > 768 && (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON')) {
         document.body.classList.remove('hovering');
       }
     });
@@ -650,11 +711,11 @@
 
     // Sphere Configuration
     const TOTAL_CARDS = 38;
-    const SPHERE_RADIUS = 18;
-    const CARD_WIDTH = 3.5;
-    const CARD_HEIGHT = 4.5;
+    const SPHERE_RADIUS = window.innerWidth < 768 ? 14 : 18;
+    const CARD_WIDTH = window.innerWidth < 768 ? 2.8 : 3.5;
+    const CARD_HEIGHT = window.innerWidth < 768 ? 3.6 : 4.5;
     
-    const DEFAULT_ZOOM = 42;
+    const DEFAULT_ZOOM = window.innerWidth < 768 ? 48 : 42;
     const MAX_ENLARGED_ZOOM = 26;
 
     // Three.js Scene Setup
@@ -739,20 +800,20 @@
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    window.addEventListener('mousedown', (e) => {
+    const handlePointerDown = (clientX, clientY) => {
       if (isFocused || window.scrollY > 50) return;
       isDragging = true;
-      previousMousePosition = { x: e.clientX, y: e.clientY };
-    });
+      previousMousePosition = { x: clientX, y: clientY };
+    };
 
-    window.addEventListener('mousemove', (e) => {
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    const handlePointerMove = (clientX, clientY) => {
+      mouse.x = (clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(clientY / window.innerHeight) * 2 + 1;
 
       if (!isDragging || isFocused || window.scrollY > 50) return;
 
-      const deltaX = e.clientX - previousMousePosition.x;
-      const deltaY = e.clientY - previousMousePosition.y;
+      const deltaX = clientX - previousMousePosition.x;
+      const deltaY = clientY - previousMousePosition.y;
 
       rotationVelocity.y = deltaX * 0.0008;
       rotationVelocity.x = deltaY * 0.0008;
@@ -760,10 +821,22 @@
       sphereGroup.rotation.y += rotationVelocity.y;
       sphereGroup.rotation.x += rotationVelocity.x;
 
-      previousMousePosition = { x: e.clientX, y: e.clientY };
-    });
+      previousMousePosition = { x: clientX, y: clientY };
+    };
 
+    window.addEventListener('mousedown', (e) => handlePointerDown(e.clientX, e.clientY));
+    window.addEventListener('mousemove', (e) => handlePointerMove(e.clientX, e.clientY));
     window.addEventListener('mouseup', () => { isDragging = false; });
+
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) handlePointerDown(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => { isDragging = false; });
 
     window.addEventListener('wheel', (e) => {
       if (isFocused) return;
