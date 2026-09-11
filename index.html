@@ -230,10 +230,10 @@
       z-index: 10;
     }
 
-    /* Fixed Sticky Horizontal Practices Section Structure */
+    /* Sticky Horizontal Practices Section Structure */
     .practices-pin-wrapper {
       position: relative;
-      height: 300vh; /* Sets the vertical scroll distance required for horizontal sequence */
+      height: 300vh;
       z-index: 20;
     }
 
@@ -243,7 +243,7 @@
       height: 100vh;
       width: 100%;
       overflow: hidden;
-      background-color: #505050; /* Covers the 3D sphere behind during scroll */
+      background: transparent; /* Allows sphere background to show through */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -294,6 +294,7 @@
       text-transform: uppercase;
       color: #ffffff;
       margin-bottom: 2rem;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
     .giant-practice-desc {
@@ -303,6 +304,7 @@
       font-weight: 300;
       max-width: 650px;
       margin: 0 auto;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
     }
 
     /* Contact Section */
@@ -334,7 +336,7 @@
       width: 100%;
       padding: 4rem 2rem;
       z-index: 10;
-      background-color: #505050;
+      background: transparent;
     }
 
     .giant-logo-container {
@@ -626,7 +628,7 @@
       }
     });
 
-    // Precision Horizontal Pinning Scroll Calculation
+    // Horizontal Pinning Scroll Calculation
     const practicesWrapper = document.getElementById('practices');
     const practicesTrack = document.getElementById('practices-track');
 
@@ -637,7 +639,7 @@
 
       if (scrolled >= 0 && scrolled <= pinDistance) {
         const progress = scrolled / pinDistance;
-        const translateX = progress * 200; // Translates through 2 additional slide panels
+        const translateX = progress * 200;
         practicesTrack.style.transform = `translateX(-${translateX}vw)`;
       } else if (scrolled < 0) {
         practicesTrack.style.transform = `translateX(0vw)`;
