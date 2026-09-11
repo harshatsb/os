@@ -215,7 +215,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Standalone Uppercase Two-Line Interstitials */
+    /* Standalone Normal-Case Big One-Liner Interstitial */
     .interstitial-section {
       min-height: 100vh;
       display: flex;
@@ -225,44 +225,85 @@
       padding: 0 2rem;
     }
 
-    .one-liner {
-      font-size: 2.2rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      line-height: 1.4;
+    .one-liner-normal {
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
       color: #ffffff;
-      text-transform: uppercase;
-      max-width: 900px;
+      max-width: 850px;
       z-index: 10;
     }
 
-    /* Practice Area Items */
-    .practice-grid {
+    /* Pinned Sideways Horizontal Practices Section */
+    .horizontal-scroll-container {
+      height: 300vh; /* Scroll track length for 3 items */
+      position: relative;
+      width: 100vw;
+    }
+
+    .sticky-viewport {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 3rem;
-      margin-top: 1rem;
+      justify-content: center;
+      align-items: center;
     }
 
-    .practice-item {
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      padding-top: 1.5rem;
+    .practices-header-fixed {
+      position: absolute;
+      top: 15vh;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      text-align: center;
     }
 
-    .practice-title {
-      font-size: 1.25rem;
-      font-weight: 400;
-      letter-spacing: 0.05em;
-      color: #ffffff;
-      margin-bottom: 0.75rem;
+    .practices-track {
+      display: flex;
+      width: 300vw;
+      height: 100vh;
+      will-change: transform;
+      transition: transform 0.1s linear;
+    }
+
+    .practice-slide {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 2rem;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .practice-slide-content {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .giant-practice-title {
+      font-size: 4rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 2rem;
     }
 
-    .practice-desc {
-      font-size: 0.95rem;
-      line-height: 1.7;
-      color: #c0c0c0;
+    .giant-practice-desc {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      color: #d0d0d0;
       font-weight: 300;
+      max-width: 650px;
+      margin: 0 auto;
     }
 
     /* Contact Block */
@@ -283,7 +324,7 @@
       border-color: #ffffff;
     }
 
-    /* Giant Brand Footer Section (Proportional Aspect Ratio Corrected) */
+    /* Giant Brand Footer Section */
     #brand-footer {
       min-height: 100vh;
       display: flex;
@@ -308,7 +349,7 @@
     .giant-logo-container img {
       width: auto;
       max-width: 90vw;
-      height: 38vh; /* Keeps height proportional to prevent distortion */
+      height: 38vh;
       object-fit: contain;
       filter: brightness(0) invert(1);
       display: block;
@@ -435,77 +476,82 @@
   <section id="about">
     <div class="content-box">
       <p class="editorial-lead">
-        <strong class="brand-bold">OpenRecord</strong> is a legal practice advising creators and artists across India’s creative economy.
+        <strong class="brand-bold">OpenRecord</strong> is a legal practice for creators and artists, with a focus on disputes arising from creative work.
       </p>
       <p class="editorial-sub">
-        We work across contracts, disputes and legal advisory, with a focus on the commercial and legal structures behind creative work.
+        We advise on disputes, contracts and the legal structures around creative work. Our work spans commercial relationships, ownership, rights and the agreements that shape them.
       </p>
       
       <button class="toggle-btn clickable" id="about-toggle-btn">[ More about OpenRecord ]</button>
 
       <div class="expandable-text" id="about-expandable">
         <p>
-          Creative work is increasingly commercial, collaborative and public. A brand deal, a collaboration, a licence, a piece of content or a creative partnership can carry consequences long after the work itself is finished.
+          Creative work often sits within relationships that are commercial, collaborative and ongoing. When those relationships change, the legal position can become as important as the work itself.
         </p>
         <p>
-          OpenRecord exists to bring considered legal advice into those relationships. We work with creators and artists to understand what they are agreeing to, protect what they have built and navigate situations when relationships or agreements break down.
+          OpenRecord advises creators and artists through these situations. We assess agreements, rights and obligations, help resolve disputes and provide clear advice on the decisions that follow. We also work on the contracts and legal structures that can prevent uncertainty before it becomes a dispute.
         </p>
         <p>
-          The practice is built around a simple idea: good legal work should make creative work easier to pursue, not harder. That means clear advice, careful drafting and a practical understanding of how creative businesses actually operate.
-        </p>
-        <p>
-          OpenRecord is based in New Delhi and works with clients across the globe.
+          Based in New Delhi; working with clients across the globe.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Uppercase Two-Line Interstitial 1 -->
+  <!-- Normal Case Big One-Liner Interstitial -->
   <div class="interstitial-section">
-    <h2 class="one-liner">
-      The things we create<br>deserve to last.
+    <h2 class="one-liner-normal">
+      When creative relationships change, the record matters.
     </h2>
   </div>
 
-  <!-- Practice Section -->
-  <section id="practices">
-    <div class="content-box">
-      <span class="section-label">Practice Areas</span>
-      <div class="practice-grid">
-        <div class="practice-item">
-          <h3 class="practice-title">Contracts</h3>
-          <p class="practice-desc">
-            The agreements behind creative work, from brand partnerships and collaborations to licensing and commercial arrangements.
-          </p>
+  <!-- Horizontal Sideways Scroll Practice Section -->
+  <div class="horizontal-scroll-container" id="practices">
+    <div class="sticky-viewport">
+      <div class="practices-header-fixed">
+        <span class="section-label" style="margin-bottom:0;">PRACTICES</span>
+      </div>
+
+      <div class="practices-track" id="practices-track">
+        <!-- Slide 1: Disputes -->
+        <div class="practice-slide">
+          <div class="practice-slide-content">
+            <h2 class="giant-practice-title">Disputes</h2>
+            <p class="giant-practice-desc">
+              Advice and representation in disputes involving agreements, ownership, creative work and commercial relationships.
+            </p>
+          </div>
         </div>
-        <div class="practice-item">
-          <h3 class="practice-title">Disputes</h3>
-          <p class="practice-desc">
-            When an agreement, relationship or piece of creative work becomes a source of conflict, we advise on the way forward.
-          </p>
+
+        <!-- Slide 2: Contracts -->
+        <div class="practice-slide">
+          <div class="practice-slide-content">
+            <h2 class="giant-practice-title">Contracts</h2>
+            <p class="giant-practice-desc">
+              Drafting and review of agreements for collaborations, brand partnerships, licensing and other creative arrangements.
+            </p>
+          </div>
         </div>
-        <div class="practice-item">
-          <h3 class="practice-title">Advisory</h3>
-          <p class="practice-desc">
-            Ongoing legal counsel on rights, ownership, commercial relationships and the business of creative work.
-          </p>
+
+        <!-- Slide 3: Advisory -->
+        <div class="practice-slide">
+          <div class="practice-slide-content">
+            <h2 class="giant-practice-title">Advisory</h2>
+            <p class="giant-practice-desc">
+              Ongoing legal advice on rights, ownership, commercial relationships and the business of creative work.
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Uppercase Two-Line Interstitial 2 -->
-  <div class="interstitial-section">
-    <h2 class="one-liner">
-      Creation matters.<br>So does the record behind it.
-    </h2>
   </div>
 
   <!-- Contact Section -->
   <section id="contact">
     <div class="content-box">
+      <span class="section-label">CONTACT</span>
       <p class="editorial-lead">
-        For legal enquiries, advisory and engagements, get in touch.
+        For enquiries, get in touch.
       </p>
       <a href="mailto:office@openrecord.law" class="contact-link clickable">office@openrecord.law</a>
     </div>
@@ -575,6 +621,26 @@
       } else {
         expandableText.classList.add('expanded');
         toggleBtn.innerText = '[ Less about OpenRecord ]';
+      }
+    });
+
+    // Horizontal Scroll Mechanism for Practices
+    const practicesContainer = document.getElementById('practices');
+    const practicesTrack = document.getElementById('practices-track');
+
+    window.addEventListener('scroll', () => {
+      const containerTop = practicesContainer.offsetTop;
+      const containerHeight = practicesContainer.offsetHeight - window.innerHeight;
+      const scrollPosition = window.scrollY - containerTop;
+
+      if (scrollPosition >= 0 && scrollPosition <= containerHeight) {
+        const progress = scrollPosition / containerHeight;
+        const translateX = progress * (200); // Moves through 2 extra viewports (0vw to -200vw)
+        practicesTrack.style.transform = `translateX(-${translateX}vw)`;
+      } else if (scrollPosition < 0) {
+        practicesTrack.style.transform = `translateX(0vw)`;
+      } else if (scrollPosition > containerHeight) {
+        practicesTrack.style.transform = `translateX(-200vw)`;
       }
     });
 
