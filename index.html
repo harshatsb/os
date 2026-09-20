@@ -14,8 +14,8 @@
 
     html, body {
       width: 100%;
-      background-color: #505050;
-      color: #ffffff;
+      background-color: #f4f4f4;
+      color: #333333;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
@@ -26,7 +26,7 @@
       left: 0;
       width: 12px;
       height: 12px;
-      background-color: #ffffff;
+      background-color: #111111;
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
@@ -58,7 +58,7 @@
       height: 130px;
       width: auto;
       display: block;
-      filter: brightness(0) invert(1);
+      filter: brightness(0);
       opacity: 0.95;
       transition: opacity 0.2s ease;
     }
@@ -81,14 +81,14 @@
     }
 
     .nav-fixed a {
-      color: #ffffff;
+      color: #333333;
       text-decoration: none;
       font-size: 0.75rem;
       letter-spacing: 0.25em;
       text-transform: uppercase;
       opacity: 0.75;
       transition: opacity 0.2s ease;
-      font-weight: 500;
+      font-weight: 600;
       white-space: nowrap;
     }
 
@@ -96,7 +96,7 @@
       opacity: 1;
     }
 
-    /* 3D Canvas Background */
+    /* 3D Canvas Background (Unchanged Sphere Container) */
     #canvas-container {
       width: 100%;
       height: 100vh;
@@ -109,7 +109,7 @@
     }
 
     #canvas-container.blurred {
-      filter: blur(16px) brightness(0.6);
+      filter: blur(16px) brightness(0.9);
     }
 
     /* Standard Viewport Sections */
@@ -143,7 +143,7 @@
       font-size: 0.7rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: #b0b0b0;
+      color: #666666;
       margin-bottom: 2.5rem;
       display: block;
       font-weight: 600;
@@ -155,7 +155,7 @@
       line-height: 1.5;
       letter-spacing: -0.01em;
       margin-bottom: 1.5rem;
-      color: #ffffff;
+      color: #111111;
     }
 
     .brand-bold {
@@ -166,7 +166,7 @@
     .editorial-sub {
       font-size: clamp(0.95rem, 2.5vw, 1.1rem);
       line-height: 1.7;
-      color: #d0d0d0;
+      color: #505050;
       font-weight: 300;
       margin-bottom: 2rem;
     }
@@ -174,15 +174,15 @@
     .toggle-btn {
       background: transparent;
       border: none;
-      color: #ffffff;
+      color: #333333;
       font-size: 0.9rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      opacity: 0.75;
+      opacity: 0.8;
       transition: opacity 0.2s ease, transform 0.2s ease;
       display: inline-block;
       margin-top: 1rem;
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .toggle-btn:hover {
@@ -205,7 +205,7 @@
     .expandable-text p {
       font-size: 0.95rem;
       line-height: 1.8;
-      color: #c0c0c0;
+      color: #505050;
       font-weight: 300;
       margin-bottom: 1.5rem;
     }
@@ -226,7 +226,7 @@
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 1.3;
-      color: #ffffff;
+      color: #111111;
       max-width: 850px;
       z-index: 10;
     }
@@ -293,19 +293,19 @@
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #ffffff;
+      color: #111111;
       margin-bottom: 2rem;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      text-shadow: 0 4px 20px rgba(255, 255, 255, 0.6);
     }
 
     .giant-practice-desc {
       font-size: clamp(1rem, 3vw, 1.25rem);
       line-height: 1.8;
-      color: #d0d0d0;
+      color: #505050;
       font-weight: 300;
       max-width: 650px;
       margin: 0 auto;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.6);
     }
 
     /* Contact Section */
@@ -313,10 +313,10 @@
       display: inline-block;
       margin-top: 2rem;
       font-size: clamp(1.15rem, 4vw, 1.5rem);
-      color: #ffffff;
+      color: #111111;
       text-decoration: none;
       letter-spacing: 0.02em;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.3);
       padding-bottom: 0.2rem;
       transition: border-color 0.2s ease, opacity 0.2s ease;
       word-break: break-all;
@@ -324,7 +324,7 @@
 
     .contact-link:hover {
       opacity: 0.8;
-      border-color: #ffffff;
+      border-color: #111111;
     }
 
     /* Giant Brand Footer */
@@ -356,7 +356,7 @@
       max-width: 90vw;
       height: 38vh;
       object-fit: contain;
-      filter: brightness(0) invert(1);
+      filter: brightness(0);
       display: block;
       opacity: 0.95;
     }
@@ -369,8 +369,8 @@
       margin-top: 3rem;
       font-size: 0.85rem;
       letter-spacing: 0.05em;
-      color: #d0d0d0;
-      font-weight: 400;
+      color: #505050;
+      font-weight: 500;
     }
 
     /* Modals */
@@ -386,7 +386,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(12px);
       transition: opacity 0.4s ease;
       padding: 1.5rem;
@@ -404,9 +404,9 @@
       max-height: 85vh;
       overflow-y: auto;
       padding: 3.5rem 2.5rem 2.5rem 2.5rem;
-      background: rgba(30, 30, 30, 0.92);
+      background: rgba(240, 240, 240, 0.92);
       backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(0, 0, 0, 0.12);
       transform: translateY(15px);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
@@ -418,7 +418,7 @@
 
     .modal-body-text {
       font-size: 0.88rem;
-      color: #c0c0c0;
+      color: #444444;
       line-height: 1.7;
       margin-bottom: 2.5rem;
       text-align: left;
@@ -435,13 +435,13 @@
 
     .action-btn {
       background: transparent;
-      color: #ffffff;
+      color: #111111;
       border: none;
       font-size: 0.85rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       font-weight: 600;
-      opacity: 0.75;
+      opacity: 0.8;
       transition: opacity 0.2s ease, transform 0.2s ease;
       display: inline-block;
       padding: 0.5rem 1rem;
@@ -645,8 +645,8 @@
   <!-- Focus Modal Overlay for Sphere Cards -->
   <div class="modal-overlay" id="overlay-modal">
     <div class="modal-content">
-      <h2 style="font-size: 1.15rem; margin-bottom: 0.75rem; font-weight: 400; color: #ffffff;" id="modal-title">Record Item</h2>
-      <p style="font-size: 0.85rem; color: #b0b0b0; line-height: 1.6; margin-bottom: 2.5rem;" id="modal-desc">Detailed legal record or case metadata placeholder.</p>
+      <h2 style="font-size: 1.15rem; margin-bottom: 0.75rem; font-weight: 500; color: #111111;" id="modal-title">Record Item</h2>
+      <p style="font-size: 0.85rem; color: #505050; line-height: 1.6; margin-bottom: 2.5rem;" id="modal-desc">Detailed legal record or case metadata placeholder.</p>
       <button class="action-btn clickable" id="close-btn">[ X ]</button>
     </div>
   </div>
@@ -709,7 +709,7 @@
       }
     });
 
-    // Sphere Configuration
+    // Sphere Configuration (Unchanged 3D Mesh Dimensions)
     const TOTAL_CARDS = 38;
     const SPHERE_RADIUS = window.innerWidth < 768 ? 14 : 18;
     const CARD_WIDTH = window.innerWidth < 768 ? 2.8 : 3.5;
