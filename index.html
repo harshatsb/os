@@ -96,7 +96,7 @@
       opacity: 1;
     }
 
-    /* 3D Canvas Background (Unchanged Sphere Container) */
+    /* 3D Canvas Background Container */
     #canvas-container {
       width: 100%;
       height: 100vh;
@@ -295,7 +295,6 @@
       text-transform: uppercase;
       color: #111111;
       margin-bottom: 2rem;
-      text-shadow: 0 4px 20px rgba(255, 255, 255, 0.6);
     }
 
     .giant-practice-desc {
@@ -305,7 +304,6 @@
       font-weight: 300;
       max-width: 650px;
       margin: 0 auto;
-      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.6);
     }
 
     /* Contact Section */
@@ -709,7 +707,7 @@
       }
     });
 
-    // Sphere Configuration (Unchanged 3D Mesh Dimensions)
+    // Sphere Configuration
     const TOTAL_CARDS = 38;
     const SPHERE_RADIUS = window.innerWidth < 768 ? 14 : 18;
     const CARD_WIDTH = window.innerWidth < 768 ? 2.8 : 3.5;
@@ -732,6 +730,8 @@
 
     const sphereGroup = new THREE.Group();
     scene.add(sphereGroup);
+
+    const cardMaterials = [];
 
     function createCardTexture(index) {
       const canvas = document.createElement('canvas');
@@ -776,6 +776,8 @@
         transparent: true,
         opacity: 0.9
       });
+      
+      cardMaterials.push(material);
 
       const mesh = new THREE.Mesh(geometry, material);
       mesh.position.copy(pos);
@@ -930,8 +932,27 @@
       }
     });
 
+    // Animation loop with scroll-driven sphere opacity & scale fade
+    let targetSphereOpacity = 0.9;
+    let targetSphereScale = 1.0;
+
     function animate() {
       requestAnimationFrame(animate);
+
+      // Smooth scroll fade calculations
+      const scrollY = window.scrollY;
+      const fadeThreshold = window.innerHeight * 0.4;
+      
+      let opacityProgress = 1 - Math.min(scrollY / fadeThreshold, 1);
+      targetSphereOpacity = opacityProgress * 0.9;
+      targetSphereScale = 0.85 + (opacityProgress * 0.15);
+
+      // Apply opacity & scale smoothly
+      sphereGroup.scale.setScalar(sphereGroup.scale.x + (targetSphereScale - sphereGroup.scale.x) * 0.1);
+      cardMaterials.forEach(mat => {
+        mat.opacity += (targetSphereOpacity - mat.opacity) * 0.1;
+        mat.visible = mat.opacity > 0.01;
+      });
 
       camera.position.z += (targetZoom - camera.position.z) * 0.08;
 
