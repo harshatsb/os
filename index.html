@@ -9,7 +9,11 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      cursor: none;
+    }
+
+    /* Force hide the default mouse cursor across the entire page and all elements */
+    html, body, *, *:hover, a, button, input {
+      cursor: none !important;
     }
 
     html, body {
@@ -17,9 +21,10 @@
       background-color: #f4f4f4;
       color: #333333;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
     }
 
-    /* Fixed Custom Cursor Dot */
+    /* Custom Cursor Dot */
     #custom-cursor {
       position: fixed;
       top: 0;
@@ -29,16 +34,14 @@
       background-color: #111111;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 99999;
+      z-index: 9999;
       transform: translate(-50%, -50%);
-      transition: transform 0.15s ease-out, background-color 0.15s ease-out, opacity 0.15s ease-out;
+      transition: transform 0.15s ease-out, background-color 0.15s ease-out;
       mix-blend-mode: difference;
-      will-change: transform;
     }
 
     body.hovering #custom-cursor {
-      transform: translate(-50%, -50%) scale(2.8);
-      background-color: #ffffff;
+      transform: translate(-50%, -50%) scale(2.5);
     }
 
     /* Header Logo */
@@ -158,11 +161,6 @@
       letter-spacing: -0.01em;
       margin-bottom: 1.5rem;
       color: #111111;
-    }
-
-    .brand-bold {
-      font-weight: 700;
-      letter-spacing: -0.02em;
     }
 
     .editorial-sub {
@@ -454,7 +452,7 @@
 
     /* Mobile Responsive Optimizations */
     @media (max-width: 768px) {
-      * {
+      html, body, *, *:hover, a, button, input {
         cursor: auto !important;
       }
 
@@ -542,7 +540,7 @@
         OpenRecord is a studio working on ownership, authorship and the agreements that shape creative work.
       </p>
       <p class="editorial-sub">
-        Its focus is disputes and the structures that prevent them, built through research, writing and advisory work.
+        Our focus is disputes and the structures that prevent them, built through research, writing and advisory work.
       </p>
       
       <button class="toggle-btn clickable" id="about-toggle-btn">[ More about OpenRecord ]</button>
@@ -552,7 +550,7 @@
           Creative work moves quickly and often informally, through deals made in conversation, agreements signed without full attention, and relationships that shift once money or credit enters the picture. What was understood at the outset does not always hold.
         </p>
         <p>
-          OpenRecord studies these situations closely, in writing and in practice. Its pieces examine ownership, authorship and the disputes that arise when creative relationships change. Its advisory work applies the same thinking to the agreements and conflicts creators and artists actually face.
+          We study these situations closely, in writing and in practice. Our pieces examine ownership, authorship and the disputes that arise when creative relationships change. Our advisory work applies the same thinking to the agreements and conflicts creators and artists actually face.
         </p>
         <p>
           Based in New Delhi. Working with clients across the globe.
@@ -568,7 +566,7 @@
     </h2>
   </div>
 
-  <!-- Sticky Horizontal Focus Section Structure -->
+  <!-- Sticky Horizontal Focus Section -->
   <div class="practices-pin-wrapper" id="focus">
     <div class="sticky-viewport">
       <div class="practices-header-fixed">
@@ -632,6 +630,7 @@
     <div class="giant-logo-container">
       <img src="OpenRecord logo.svg" alt="OpenRecord Giant Logo" />
       <div class="giant-footer-meta">
+        <span>OpenRecord.</span>
         <span>© 2026 OpenRecord. All rights reserved.</span>
         <span>New Delhi, India.</span>
       </div>
@@ -659,38 +658,28 @@
   </div>
 
   <script>
-    // Robust Custom Cursor Fix
+    // Custom Cursor with Persistent Visibility Fix
     const cursor = document.getElementById('custom-cursor');
 
-    const updateCursorPosition = (e) => {
+    window.addEventListener('mousemove', (e) => {
       if (window.innerWidth > 768) {
         cursor.style.left = `${e.clientX}px`;
         cursor.style.top = `${e.clientY}px`;
+        cursor.style.opacity = '1';
       }
-    };
+    });
 
-    window.addEventListener('mousemove', updateCursorPosition, { passive: true });
-
-    const handleHoverIn = (e) => {
-      if (window.innerWidth <= 768) return;
-      const target = e.target;
-      if (
-        target.classList.contains('clickable') ||
-        target.closest('.clickable') ||
-        target.tagName === 'A' ||
-        target.tagName === 'BUTTON'
-      ) {
+    document.addEventListener('mouseover', (e) => {
+      if (window.innerWidth > 768 && (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON')) {
         document.body.classList.add('hovering');
       }
-    };
+    });
 
-    const handleHoverOut = (e) => {
-      if (window.innerWidth <= 768) return;
-      document.body.classList.remove('hovering');
-    };
-
-    document.addEventListener('mouseover', handleHoverIn, true);
-    document.addEventListener('mouseout', handleHoverOut, true);
+    document.addEventListener('mouseout', (e) => {
+      if (window.innerWidth > 768 && (e.target.classList.contains('clickable') || e.target.closest('.clickable') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON')) {
+        document.body.classList.remove('hovering');
+      }
+    });
 
     // Expandable Text Handler
     const toggleBtn = document.getElementById('about-toggle-btn');
