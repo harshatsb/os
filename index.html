@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenRecord</title>
   <style>
-    * {
+    /* Force-hide default OS cursor across all states and elements */
+    *, *::before, *::after, html, body, a, button, input, select, textarea, div, span {
+      cursor: none !important;
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
-
-    /* Force hide the default mouse cursor across the entire page and all elements */
-    html, body, *, *:hover, a, button, input {
-      cursor: none !important;
     }
 
     html, body {
@@ -21,7 +18,6 @@
       background-color: #f4f4f4;
       color: #333333;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      overflow-x: hidden;
     }
 
     /* Custom Cursor Dot */
@@ -34,7 +30,7 @@
       background-color: #111111;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 9999;
+      z-index: 99999;
       transform: translate(-50%, -50%);
       transition: transform 0.15s ease-out, background-color 0.15s ease-out;
       mix-blend-mode: difference;
@@ -163,6 +159,11 @@
       color: #111111;
     }
 
+    .brand-bold {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
     .editorial-sub {
       font-size: clamp(0.95rem, 2.5vw, 1.1rem);
       line-height: 1.7;
@@ -231,7 +232,7 @@
       z-index: 10;
     }
 
-    /* Sticky Horizontal Focus Section Structure */
+    /* Sticky Horizontal Practices Section Structure */
     .practices-pin-wrapper {
       position: relative;
       height: 300vh;
@@ -309,7 +310,7 @@
     /* Contact Section */
     .contact-link {
       display: inline-block;
-      margin-top: 1.5rem;
+      margin-top: 2rem;
       font-size: clamp(1.15rem, 4vw, 1.5rem);
       color: #111111;
       text-decoration: none;
@@ -452,7 +453,7 @@
 
     /* Mobile Responsive Optimizations */
     @media (max-width: 768px) {
-      html, body, *, *:hover, a, button, input {
+      *, *::before, *::after, html, body, a, button, input, select, textarea, div, span {
         cursor: auto !important;
       }
 
@@ -523,7 +524,7 @@
   <!-- Bottom Navigation -->
   <nav class="nav-fixed">
     <a href="#about" class="clickable nav-link">[ ABOUT ]</a>
-    <a href="#focus" class="clickable nav-link">[ FOCUS ]</a>
+    <a href="#practices" class="clickable nav-link">[ FOCUS ]</a>
     <a href="#contact" class="clickable nav-link">[ CONTACT ]</a>
   </nav>
 
@@ -537,7 +538,7 @@
   <section id="about">
     <div class="content-box">
       <p class="editorial-lead">
-        OpenRecord is a studio working on ownership, authorship and the agreements that shape creative work.
+        <strong class="brand-bold">OpenRecord</strong> is a legal studio working on ownership, authorship and the agreements that shape creative work.
       </p>
       <p class="editorial-sub">
         Our focus is disputes and the structures that prevent them, built through research, writing and advisory work.
@@ -566,8 +567,8 @@
     </h2>
   </div>
 
-  <!-- Sticky Horizontal Focus Section -->
-  <div class="practices-pin-wrapper" id="focus">
+  <!-- Sticky Horizontal Sideways Scroll Container -->
+  <div class="practices-pin-wrapper" id="practices">
     <div class="sticky-viewport">
       <div class="practices-header-fixed">
         <span class="section-label" style="margin-bottom:0;">FOCUS</span>
@@ -630,7 +631,6 @@
     <div class="giant-logo-container">
       <img src="OpenRecord logo.svg" alt="OpenRecord Giant Logo" />
       <div class="giant-footer-meta">
-        <span>OpenRecord.</span>
         <span>© 2026 OpenRecord. All rights reserved.</span>
         <span>New Delhi, India.</span>
       </div>
@@ -658,14 +658,24 @@
   </div>
 
   <script>
-    // Custom Cursor with Persistent Visibility Fix
+    // Permanent Custom Cursor Handling
     const cursor = document.getElementById('custom-cursor');
 
     window.addEventListener('mousemove', (e) => {
       if (window.innerWidth > 768) {
         cursor.style.left = `${e.clientX}px`;
         cursor.style.top = `${e.clientY}px`;
-        cursor.style.opacity = '1';
+        cursor.style.display = 'block';
+      }
+    });
+
+    document.addEventListener('mouseleave', () => {
+      cursor.style.display = 'none';
+    });
+
+    document.addEventListener('mouseenter', () => {
+      if (window.innerWidth > 768) {
+        cursor.style.display = 'block';
       }
     });
 
@@ -697,7 +707,7 @@
     });
 
     // Horizontal Pinning Scroll Calculation
-    const practicesWrapper = document.getElementById('focus');
+    const practicesWrapper = document.getElementById('practices');
     const practicesTrack = document.getElementById('practices-track');
 
     window.addEventListener('scroll', () => {
